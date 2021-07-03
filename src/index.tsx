@@ -1,26 +1,27 @@
-import React, { FC, HTMLAttributes, ReactChild } from 'react';
+import React from 'react';
+import { FormProps } from '@/typings/form'
+import FormInput from './FormItems/Input'
+import FormSelect from './FormItems/Select'
+import FormCheckbox from './FormItems/Checkbox'
 
-export interface Props extends HTMLAttributes<HTMLDivElement> {
-  /** custom content, defaults to 'the snozzberries taste like snozzberries' */
-  children?: ReactChild;
-}
-
-// Please do not use types off of a default export module or else Storybook Docs will suffer.
-// see: https://github.com/storybookjs/storybook/issues/9556
-/**
- * A custom Thing component. Neat!
- */
-export const Thing: FC<Props> = ({ children }) => {
+const SchemaForm = <FormDataType extends {}>({ schema }: FormProps<FormDataType>) => {
   return (
     <div>
-      <div>{children || `the snozzberries taste like snozzberries`}</div>
-      <div
-        style={{
-          background: 'red',
-        }}
-      >
-        this is a demo
-      </div>
+      <FormInput onChange={value => {
+        console.log('input value', value)
+      }} />
+
+      <FormSelect onChange={value => {
+        console.log("select value", value)
+      }}>
+
+      </FormSelect>
+
+      <FormCheckbox onChange={value => {
+        console.log('checkbox value', value)
+      }}></FormCheckbox>
     </div>
   );
 };
+
+export default SchemaForm
