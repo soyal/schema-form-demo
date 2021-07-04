@@ -12,6 +12,12 @@ export interface FormSchema<FormDataType = any> {
 
 type DataStore = any[];
 
+type StatusFunc = (
+  value: any,
+  formData: FormDataType,
+  dataStore?: DataStore
+) => boolean;
+
 export interface FormItemSchema<FormDataType = any> {
   field: string; // 字段名
   label: string; // 字段中文解释
@@ -22,16 +28,11 @@ export interface FormItemSchema<FormDataType = any> {
       | React.FC<FormItemProps>
       | (new (props: FormItemProps) => JSX.Element | JSX.ElementClass);
     // 除了value onChange之外的传参
-    props: { [key: string]: any };
+    props?: { [key: string]: any };
   };
-  arrayOf: FormItemSchema<FormDataType>;
-  defaultValue?: any;
-  visible?:
-    | boolean
-    | ((formData: FormDataType, dataStore?: DataStore) => boolean);
-  disabled?:
-    | boolean
-    | ((formData: FormDataType, dataStore?: DataStore) => boolean);
+  arrayOf?: FormItemSchema<FormDataType>;
+  visible?: boolean | StatusFunc;
+  disabled?: boolean | StatusFunc;
   // 可直接参考antd3文档
   rules?: Array<{
     validator: (
@@ -52,7 +53,7 @@ export interface FormItemSchema<FormDataType = any> {
   updateFormValue?: [
     {
       timing: 'onChange' | 'onBlur' | 'onFocus';
-      changeFormValue: (
+      updator: (
         setFieldsValue: (fieldsValue: { [field: string]: any }) => void,
         currValue: any,
         formData: FormDataType,

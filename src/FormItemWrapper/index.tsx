@@ -6,30 +6,26 @@ import FormItemInterceptor from './FormItemInterceptor';
 export interface FormWrapperProps<FormDataType> {
   formItemSchema: FormItemSchema<FormDataType>;
   formSchema: FormSchema<FormDataType>;
-  formData: FormDataType;
   form: FormComponentProps['form'];
 }
 
-const FormItemWrapper = <FormDataType extends {}>(
+const FormItemWrapper = <FormDataType extends { [key: string]: any }>(
   props: FormWrapperProps<FormDataType>
 ) => {
-  const { formItemSchema, formData, formSchema, form } = props;
+  const { formItemSchema, formSchema, form } = props;
   const { dataStore } = formSchema;
-  const {
-    field,
-    visible,
-    disabled,
-    rules,
-    arrayOf,
-    defaultValue,
-  } = formItemSchema;
+  const { field, visible, disabled, rules, arrayOf } = formItemSchema;
 
   // is visible
   let visibleResult = true;
   if (typeof visible === 'boolean') {
     visibleResult = visible;
   } else if (typeof visible === 'function') {
-    visibleResult = visible(formData, dataStore);
+    visibleResult = visible(
+      form.getFieldValue(field),
+      form.getFieldsValue(),
+      dataStore
+    );
   }
 
   // is disabled
@@ -37,7 +33,11 @@ const FormItemWrapper = <FormDataType extends {}>(
   if (typeof disabled === 'boolean') {
     disabledResult = disabled;
   } else if (typeof disabled === 'function') {
-    disabledResult = disabled(formData, dataStore);
+    disabledResult = disabled(
+      form.getFieldValue(field),
+      form.getFieldsValue(),
+      dataStore
+    );
   }
 
   // if  invisible, do not render
@@ -48,7 +48,9 @@ const FormItemWrapper = <FormDataType extends {}>(
 
   return getFieldDecorator(field, {
     rules,
-  })(<FormItemInterceptor {...props} />) as JSX.Element;
+  })(
+    <FormItemInterceptor {...props} disabled={disabledResult} />
+  ) as JSX.Element;
 };
 
 export default FormItemWrapper;

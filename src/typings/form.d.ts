@@ -8,9 +8,11 @@ export interface FormProps<FormDataType> {
 }
 
 export interface FormItemProps<ValueType> {
-  disabled?: boolean;
-  onBlur?: (value: ValueType) => void,
-  onFocus?: (value: ValueType) => void,
-  value?: ValueType;
-  onChange: (nValue: ValueType) => void;
+  onChange: (nValue: ValueType) => void; // required
+  value?: ValueType; // required
+  label?: string;
+  field?: string;
+  disabled?: boolean; // required
+  onBlur?: (value: ValueType) => void;
+  onFocus?: (value: ValueType) => void;
 }

@@ -1,25 +1,24 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { FormProps } from '@/typings/form';
 import FormItemWrapper from './FormItemWrapper';
 import Form, { FormComponentProps } from 'antd/es/form';
-import './index.css';
 
-export interface IProps<FormDataType = any> extends FormProps<FormDataType> {
+export type IProps<FormDataType = any> = FormProps<FormDataType> & {
   form: FormComponentProps['form'];
-}
+};
 
 const SchemaForm = <FormDataType extends {} = any>({
   schema,
-  formData,
+  formData, // 用于初始化
   onSubmit,
   form,
 }: IProps<FormDataType> & FormComponentProps) => {
   const { formId, formLabel, formItems } = schema;
 
-  const [localFormData, setLocalFormData] = useState<FormDataType>(formData);
-
   useEffect(() => {
-    setLocalFormData(formData);
+    if (formData) {
+      form.setFieldsValue(formData);
+    }
   }, [formData]);
 
   const handleSubmit = useCallback(
@@ -47,7 +46,6 @@ const SchemaForm = <FormDataType extends {} = any>({
           formItemSchema={formItem}
           formSchema={schema}
           form={form}
-          formData={localFormData}
         />
       ))}
     </Form>
