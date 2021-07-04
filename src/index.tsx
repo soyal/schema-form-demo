@@ -1,27 +1,59 @@
-import React from 'react';
-import { FormProps } from '@/typings/form'
-import FormInput from './FormItems/Input'
-import FormSelect from './FormItems/Select'
-import FormCheckbox from './FormItems/Checkbox'
+import React, { useState, useEffect, useCallback } from 'react';
+import { FormProps } from '@/typings/form';
+import FormItemWrapper from './FormItemWrapper';
+import Form, { FormComponentProps } from 'antd/es/form';
+import './index.css';
 
-const SchemaForm = <FormDataType extends {}>({ schema }: FormProps<FormDataType>) => {
+export interface IProps<FormDataType = any> extends FormProps<FormDataType> {
+  form: FormComponentProps['form'];
+}
+
+const SchemaForm = <FormDataType extends {} = any>({
+  schema,
+  formData,
+  onSubmit,
+  form,
+}: IProps<FormDataType> & FormComponentProps) => {
+  const { formId, formLabel, formItems } = schema;
+
+  const [localFormData, setLocalFormData] = useState<FormDataType>(formData);
+
+  useEffect(() => {
+    setLocalFormData(formData);
+  }, [formData]);
+
+  const handleSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
+      form.validateFields((err, values) => {
+        if (!err) {
+          console.log('Received values of form: ', values);
+          onSubmit(values);
+        }
+      });
+    },
+    [form]
+  );
+
   return (
-    <div>
-      <FormInput onChange={value => {
-        console.log('input value', value)
-      }} />
-
-      <FormSelect onChange={value => {
-        console.log("select value", value)
-      }}>
-
-      </FormSelect>
-
-      <FormCheckbox onChange={value => {
-        console.log('checkbox value', value)
-      }}></FormCheckbox>
-    </div>
+    <Form
+      data-msform-id={formId}
+      data-msform-label={formLabel}
+      onSubmit={handleSubmit}
+    >
+      {formItems.map((formItem) => (
+        <FormItemWrapper
+          key={formItem.field}
+          formItemSchema={formItem}
+          formSchema={schema}
+          form={form}
+          formData={localFormData}
+        />
+      ))}
+    </Form>
   );
 };
 
-export default SchemaForm
+const FormComponent = Form.create<IProps>()(SchemaForm);
+
+export default FormComponent;

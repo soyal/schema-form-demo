@@ -1,4 +1,7 @@
-export interface FormSchema<FormDataType> {
+import React from 'react';
+import { FormItemProps } from './form';
+
+export interface FormSchema<FormDataType = any> {
   formId: string; // 打点字段
   formLabel: string; // 打点字段
   formItems: Array<FormItemSchema<FormDataType>>; // 表单项描述
@@ -9,23 +12,26 @@ export interface FormSchema<FormDataType> {
 
 type DataStore = any[];
 
-export interface FormItemSchema<FormDataType> {
+export interface FormItemSchema<FormDataType = any> {
   field: string; // 字段名
   label: string; // 字段中文解释
   // 调用的组件
   component: {
     // 强制入参参考FormItemProps
-    Element: JSX.Element;
+    Element:
+      | React.FC<FormItemProps>
+      | (new (props: FormItemProps) => JSX.Element | JSX.ElementClass);
     // 除了value onChange之外的传参
     props: { [key: string]: any };
   };
+  arrayOf: FormItemSchema<FormDataType>;
   defaultValue?: any;
   visible?:
     | boolean
-    | ((formData: FormDataType, dataStore: DataStore) => boolean);
+    | ((formData: FormDataType, dataStore?: DataStore) => boolean);
   disabled?:
     | boolean
-    | ((formData: FormDataType, dataStore: DataStore) => boolean);
+    | ((formData: FormDataType, dataStore?: DataStore) => boolean);
   // 可直接参考antd3文档
   rules?: Array<{
     validator: (
@@ -47,10 +53,11 @@ export interface FormItemSchema<FormDataType> {
     {
       timing: 'onChange' | 'onBlur' | 'onFocus';
       changeFormValue: (
-        setFieldsValue: (fieldsValue: { [field: string]: any }) => void
+        setFieldsValue: (fieldsValue: { [field: string]: any }) => void,
+        currValue: any,
+        formData: FormDataType,
+        dataStore?: DataStore
       ) => void;
     }
   ];
-  className?: string;
-  style?: object;
 }

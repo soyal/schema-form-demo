@@ -9,8 +9,7 @@ const Select: React.FC<FormItemProps<string>> = ({ value, onChange }) => {
         name="fruit"
         id={value}
         onChange={(e) => {
-          debugger;
-          console.log(e.target.value);
+          onChange(e.target.value)
         }}
       >
         <option value="apple">apple</option>
