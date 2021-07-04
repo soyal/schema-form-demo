@@ -5,8 +5,6 @@ import { FormSchema } from '../src/typings/schema';
 import Input from 'antd/es/input';
 import Radio from 'antd/es/radio'
 
-const foo = typeof SchemaForm;
-
 const meta: Meta = {
   title: 'Basic',
   component: SchemaForm,
