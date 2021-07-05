@@ -3,7 +3,9 @@ import { Meta, Story } from '@storybook/react';
 import SchemaForm, { IProps } from '../src';
 import { FormSchema } from '../src/typings/schema';
 import Input from 'antd/es/input';
-import Radio from 'antd/es/radio'
+import Radio from 'antd/es/radio';
+import Button from 'antd/es/button';
+import ArrayOfWrapper from './components/FieldWrapper';
 
 // test
 
@@ -35,20 +37,22 @@ const Template: Story<IProps> = () => {
         component: {
           Element: Input,
           props: {
-            defaultValue:''
-          }
+            defaultValue: '',
+          },
         },
-        updateFormValue: [{
-          timing: 'onChange',
-          updator: (setFieldsValue, currValue, formData) => {
-            console.log("updator", formData)
-            if(formData['name'] === 'sss') {
-              setFieldsValue({
-                'os': 'others'
-              })
-            }
-          }
-        }]
+        updateFormValue: [
+          {
+            timing: 'onChange',
+            updator: (setFieldsValue, currValue, formData) => {
+              console.log('updator', formData);
+              if (formData['name'] === 'sss') {
+                setFieldsValue({
+                  os: 'others',
+                });
+              }
+            },
+          },
+        ],
       },
       {
         field: 'os',
@@ -56,18 +60,51 @@ const Template: Story<IProps> = () => {
         component: {
           Element: Radio.Group,
           props: {
-            options: [{
-              label: '安卓',
-              value: 'android'
-            }, {
-              label: 'IOS',
-              value:'ios'
-            }, {
-              label: '其他',
-              value: 'others'
-            }]
-          }
+            options: [
+              {
+                label: '安卓',
+                value: 'android',
+              },
+              {
+                label: 'IOS',
+                value: 'ios',
+              },
+              {
+                label: '其他',
+                value: 'others',
+              },
+            ],
+          },
         },
+      },
+      {
+        label: '嵌套数组表单',
+        field: 'songList',
+        component: {
+          Element: ArrayOfWrapper,
+        },
+        arrayOf: [
+          {
+            field: 'a',
+            label: 'A',
+            component: {
+              Element: Input,
+              props: {
+                placeholder: '请输入A',
+              },
+            },
+          },
+          {
+            field: 'b',
+            label: 'B',
+            component: {
+              Element: Input,
+              props: {
+                placeholder: '请输入B',
+              },
+            },
+          },
+        ],
       },
     ],
   };
@@ -78,7 +115,11 @@ const Template: Story<IProps> = () => {
         console.log('values', values);
       }}
       schema={schemas}
-    ></SchemaForm>
+    >
+      <div>
+        <Button htmlType="submit">提交</Button>
+      </div>
+    </SchemaForm>
   );
 };
 

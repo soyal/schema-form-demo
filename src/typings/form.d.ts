@@ -15,3 +15,9 @@ export interface FormItemProps<ValueType> {
   onBlur?: (value: ValueType) => void;
   onFocus?: (value: ValueType) => void;
 }
+
+export interface FormArrayOfWrapper {
+  onAdd: (itemInitialValue: any) => void;
+  onDel: (itemIndex: number) => void;
+  children: JSX.Element[];
+}

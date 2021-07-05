@@ -5,6 +5,7 @@ import Form, { FormComponentProps } from 'antd/es/form';
 
 export type IProps<FormDataType = any> = FormProps<FormDataType> & {
   form: FormComponentProps['form'];
+  children: JSX.Element;
 };
 
 const SchemaForm = <FormDataType extends {} = any>({
@@ -12,6 +13,7 @@ const SchemaForm = <FormDataType extends {} = any>({
   formData, // 用于初始化
   onSubmit,
   form,
+  children,
 }: IProps<FormDataType> & FormComponentProps) => {
   const { formId, formLabel, formItems } = schema;
 
@@ -48,6 +50,8 @@ const SchemaForm = <FormDataType extends {} = any>({
           form={form}
         />
       ))}
+
+      {children}
     </Form>
   );
 };
