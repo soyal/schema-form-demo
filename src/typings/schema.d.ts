@@ -30,7 +30,7 @@ export interface FormItemSchema<FormDataType = any> {
     // 除了value onChange之外的传参
     props?: { [key: string]: any };
   };
-  arrayOf?: FormItemSchema<FormDataType>;
+  arrayOf?: Array<FormItemSchema<FormDataType>>;
   visible?: boolean | StatusFunc;
   disabled?: boolean | StatusFunc;
   // 可直接参考antd3文档

@@ -43,6 +43,15 @@ const FormItemWrapper = <FormDataType extends { [key: string]: any }>(
   // if  invisible, do not render
   if (!visibleResult) return null;
 
+  if(arrayOf && arrayOf.length > 0) {
+    const { component } = formItemSchema
+    const { Element, props } = component
+
+    return <Element {...props}>
+      {arrayOf.map()}
+    </Element>
+  }
+
   // 开始处理渲染内容
   const { getFieldDecorator } = form;
 
