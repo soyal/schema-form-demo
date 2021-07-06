@@ -2,40 +2,28 @@
  * 处于antd form getFieldDecorator与Element之间的数据拦截层
  * 用于处理联动逻辑
  */
-import React from 'react';
+import React, { useState } from 'react';
 import { FormWrapperProps } from './index';
+import { FormItemProps } from '@/typings/form';
+import { ListField } from 'rc-field-form/es/List';
 
-interface FormItemInterceptorProps<FormDataType>
-  extends FormWrapperProps<FormDataType> {
+interface FormItemInterceptorProps extends FormWrapperProps<any> {
   onChange?: (value: any) => void;
   value?: any;
   disabled?: boolean;
-  prefixPath?: string[];
+  listField?: ListField;
 }
 
-class FormItemInterceptor<FormDataType> extends React.Component<
-  FormItemInterceptorProps<FormDataType>
-> {
-  shouldComponentUpdate(nextProps: FormItemInterceptorProps<FormDataType>) {
-    const checkList = ['value', 'disabled', 'formData', 'formSchema'];
-
-    return checkList.some((key) => {
-      const propKey = key as keyof FormItemInterceptorProps<FormDataType>;
-      return this.props[propKey] !== nextProps[propKey];
-    });
-  }
-
-  render() {
-    const {
-      form,
-      formItemSchema,
-      value,
-      onChange,
-      formSchema,
-      disabled,
-      prefixPath,
-    } = this.props;
-
+const FormItemInterceptor = React.memo(
+  ({
+    formItemSchema,
+    value,
+    onChange,
+    formSchema,
+    disabled,
+    listField,
+    form,
+  }: FormItemInterceptorProps) => {
     const { component, updateFormValue, label, field } = formItemSchema;
     const { Element, props } = component;
     const { setFieldsValue } = form;
@@ -60,27 +48,31 @@ class FormItemInterceptor<FormDataType> extends React.Component<
         hooks['onFocus'].push(updator);
       }
     });
-    console.log('render', field);
+
+    const ResultElement = Element as React.FC<FormItemProps>;
+
     return (
-      <Element
+      <ResultElement
         disabled={disabled}
         value={value}
         label={label}
         field={field}
         // onChange联动
         onChange={(nValue: any) => {
+          console.log('onChange', onChange)
           onChange && onChange(nValue);
           if (hooks.onChange.length > 0) {
             hooks.onChange.forEach((fn) => {
               let formData = null;
-              if (prefixPath && prefixPath.length > 0) {
-                // 如果是嵌套的路径，则formData为整个对象
-                // 比如该字段为songList[0].name，则得到的formData为songList[0]
-                formData = form.getFieldValue(prefixPath.join('.'));
-              } else {
-                formData = form.getFieldsValue() as any;
-              }
-              fn(setFieldsValue, nValue, formData, dataStore);
+              console.log('list field', listField);
+              // if (prefixPath && prefixPath.length > 0) {
+              //   // 如果是嵌套的路径，则formData为整个对象
+              //   // 比如该字段为songList[0].name，则得到的formData为songList[0]
+              //   formData = form.getFieldValue(prefixPath.join('.'));
+              // } else {
+              //   formData = form.getFieldsValue() as any;
+              // }
+              // fn(setFieldsValue, nValue, formData, dataStore);
             });
           }
         }}
@@ -107,9 +99,17 @@ class FormItemInterceptor<FormDataType> extends React.Component<
             : undefined
         }
         {...props}
-      ></Element>
+      ></ResultElement>
     );
+  },
+  (prevProps, nextProps) => {
+    const checkList = ['value', 'disabled', 'formData', 'formSchema'];
+
+    return checkList.some((key) => {
+      const propKey = key as keyof FormItemInterceptorProps;
+      return prevProps[propKey] !== nextProps[propKey];
+    });
   }
-}
+);
 
 export default FormItemInterceptor;

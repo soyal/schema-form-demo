@@ -1,15 +1,15 @@
 import React from 'react';
 import { FormArrayOfWrapper } from '../../src/typings/form';
 
-const FieldWrapper = (props: FormArrayOfWrapper) => {
-  const { children, onAdd, onDel } = props;
+const FieldWrapper: React.FC<FormArrayOfWrapper> = (props) => {
+  const { children, add, remove } = props;
   return (
     <div>
       <div>{children}</div>
       <div>
         <span
           onClick={() => {
-            onAdd({});
+            add({});
           }}
         >
           添加子项
@@ -20,7 +20,7 @@ const FieldWrapper = (props: FormArrayOfWrapper) => {
             color: 'red',
           }}
           onClick={() => {
-            onDel(children.length - 1);
+            remove(children.length - 1);
           }}
         >
           删除最后一项

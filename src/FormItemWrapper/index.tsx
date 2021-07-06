@@ -1,21 +1,31 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { FormItemSchema, FormSchema } from '@/typings/schema';
+import { FormArrayOfWrapper } from '@/typings/form'
 import FormItemInterceptor from './FormItemInterceptor';
-import Form, { useForm } from 'rc-field-form';
+import Form, { FormInstance } from 'rc-field-form';
+import { ListField } from 'rc-field-form/es/List';
 
-const { List } = Form
+const { List, Field } = Form;
 export interface FormWrapperProps<FormDataType> {
   formItemSchema: FormItemSchema<FormDataType>;
   formSchema: FormSchema<FormDataType>;
+  listField?: ListField;
+  form: FormInstance;
 }
 
 const FormItemWrapper = <FormDataType extends { [key: string]: any }>(
   props: FormWrapperProps<FormDataType>
 ) => {
-  const { formItemSchema, formSchema } = props;
+  const { formItemSchema, formSchema, listField, form } = props;
   const { dataStore } = formSchema;
-  const { field, visible, disabled, rules, arrayOf = [] } = formItemSchema;
-  const [form] = useForm();
+  const {
+    field,
+    visible,
+    disabled,
+    rules,
+    arrayOf = [],
+    initialValue,
+  } = formItemSchema;
 
   // is visible
   let visibleResult = true;
@@ -46,48 +56,54 @@ const FormItemWrapper = <FormDataType extends { [key: string]: any }>(
 
   // handle arrayOf
   if (arrayOf && arrayOf.length > 0) {
-    const { component } = formItemSchema;
+    const { component, rules } = formItemSchema;
     const { Element, props } = component;
 
-    const fieldValue = form.getFieldValue(field);
-    
-    
+    const ResultElement = Element as React.FC<FormArrayOfWrapper>
 
     return (
-      <Element {...props} onAdd={onArrayItemAdd} onDel={onArrayItemDel}>
-        {/* tslint-disable */}
-        {fieldValue.map((_: any, index: number) => {
+      <List name={field} initialValue={[]} rules={rules}>
+        {(fieldItems, { add, remove }) => {
           return (
-            <div key={index}>
-              {arrayOf.map((nestedSchemaItem) => (
-                <FormItemWrapper
-                  key={nestedSchemaItem.field}
-                  form={form}
-                  formItemSchema={nestedSchemaItem}
-                  formSchema={formSchema}
-                  prefixPath={[`${field}[${index}]`]}
-                />
-              ))}
-            </div>
+            <ResultElement {...props} add={add} remove={remove}>
+              {fieldItems.map((fieldItem) => {
+                return (
+                  <div key={fieldItem.name}>
+                    {arrayOf.map((childrenItemSchema) => (
+                      <FormItemWrapper
+                        key={childrenItemSchema.field}
+                        formItemSchema={childrenItemSchema}
+                        formSchema={formSchema}
+                        listField={fieldItem}
+                        form={form}
+                      />
+                    ))}
+                  </div>
+                );
+              })}
+            </ResultElement>
           );
-        })}
-      </Element>
+        }}
+      </List>
     );
   }
 
   // 开始处理渲染内容
-  const { getFieldDecorator } = form;
-  const resultFieldName = prefixPath.concat(field).join('.');
-
-  return getFieldDecorator(resultFieldName, {
-    rules,
-  })(
-    <FormItemInterceptor
-      {...props}
-      disabled={disabledResult}
-      prefixPath={prefixPath}
-    />
-  ) as JSX.Element;
+  return (
+    <Field
+      {...listField}
+      name={field}
+      rules={rules}
+      initialValue={initialValue}
+    >
+      <FormItemInterceptor
+        {...props}
+        listField={listField}
+        disabled={disabledResult}
+        form={form}
+      />
+    </Field>
+  );
 };
 
 export default FormItemWrapper;

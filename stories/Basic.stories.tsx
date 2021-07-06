@@ -6,6 +6,7 @@ import Input from 'antd/es/input';
 import Radio from 'antd/es/radio';
 import Button from 'antd/es/button';
 import ArrayOfWrapper from './components/FieldWrapper';
+import AtomInput from './components/AtomInput'
 
 // test
 
@@ -34,8 +35,9 @@ const Template: Story<IProps> = () => {
       {
         field: 'name',
         label: '姓名',
+        initialValue: 'a3',
         component: {
-          Element: Input,
+          Element: AtomInput,
           props: {
             defaultValue: '',
           },

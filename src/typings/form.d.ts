@@ -6,7 +6,7 @@ export interface FormProps<FormDataType> {
   onSubmit: (formData: FormDataType) => void;
 }
 
-export interface FormItemProps<ValueType> {
+export interface FormItemProps<ValueType = any> {
   onChange: (nValue: ValueType) => void; // required to implement
   value?: ValueType; // required to implement
   label?: string;
@@ -17,7 +17,7 @@ export interface FormItemProps<ValueType> {
 }
 
 export interface FormArrayOfWrapper {
-  onAdd: (itemInitialValue: any) => void;
-  onDel: (itemIndex: number) => void;
+  add: (itemInitialValue: any) => void;
+  remove: (itemIndex: number) => void;
   children: JSX.Element[];
 }
