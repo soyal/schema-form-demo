@@ -1,10 +1,10 @@
 import React, { useEffect, useCallback } from 'react';
 import { FormProps } from '@/typings/form';
 import FormItemWrapper from './FormItemWrapper';
-import Form, { FormComponentProps } from 'antd/es/form';
+import { createForm, WrappedFormMethods } from 'rc-form';
 
 export type IProps<FormDataType = any> = FormProps<FormDataType> & {
-  form: FormComponentProps['form'];
+  form: WrappedFormMethods;
   children: JSX.Element;
 };
 
@@ -14,7 +14,7 @@ const SchemaForm = <FormDataType extends {} = any>({
   onSubmit,
   form,
   children,
-}: IProps<FormDataType> & FormComponentProps) => {
+}: IProps<FormDataType>) => {
   const { formId, formLabel, formItems } = schema;
 
   useEffect(() => {
@@ -29,6 +29,7 @@ const SchemaForm = <FormDataType extends {} = any>({
       form.validateFields((err, values) => {
         if (!err) {
           console.log('Received values of form: ', values);
+          debugger
           onSubmit(values);
         }
       });
@@ -37,7 +38,7 @@ const SchemaForm = <FormDataType extends {} = any>({
   );
 
   return (
-    <Form
+    <form
       data-msform-id={formId}
       data-msform-label={formLabel}
       onSubmit={handleSubmit}
@@ -52,10 +53,10 @@ const SchemaForm = <FormDataType extends {} = any>({
       ))}
 
       {children}
-    </Form>
+    </form>
   );
 };
 
-const FormComponent = Form.create<IProps>()(SchemaForm);
+const FormComponent = createForm<IProps>()(SchemaForm);
 
 export default FormComponent;

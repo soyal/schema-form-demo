@@ -1,12 +1,12 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { FormItemSchema, FormSchema } from '@/typings/schema';
-import { FormComponentProps } from 'antd/es/form';
 import FormItemInterceptor from './FormItemInterceptor';
+import { WrappedFormMethods } from 'rc-form';
 
 export interface FormWrapperProps<FormDataType> {
   formItemSchema: FormItemSchema<FormDataType>;
   formSchema: FormSchema<FormDataType>;
-  form: FormComponentProps['form'];
+  form: WrappedFormMethods;
   prefixPath?: string[];
 }
 
@@ -18,19 +18,25 @@ const FormItemWrapper = <FormDataType extends { [key: string]: any }>(
   const { field, visible, disabled, rules, arrayOf = [] } = formItemSchema;
 
   // to fix antd3's warning, relate to issue: https://github.com/ant-design/ant-design/issues/11205
-  const getFieldValueX = (form: FormComponentProps['form'], field: string) => {
+  const getFieldValueX = (form: WrappedFormMethods, field: string) => {
     console.log('field path', field);
     return form.getFieldsValue()[field];
   };
 
   const onArrayItemAdd = useCallback(
     (itemInitialValue: any) => {
-      const nFieldValue = (form.getFieldsValue()[field] || []).concat(
-        itemInitialValue
-      );
-      console.log('nFieldValue', nFieldValue);
+      const originFiledValue = getFieldValueX(form, field) || [];
+
+      // 只有通过这种方式才能注册songList[0] = {} 这种嵌套变量
+      form.getFieldDecorator(`${field}[${originFiledValue.length}]`, {
+        initialValue: itemInitialValue,
+      });
+      const nValue = getFieldValueX(form, field);
+      console.log('afater getFieldDecorator', nValue);
+
+      // 只是为了触发更新
       form.setFieldsValue({
-        [field]: nFieldValue,
+        [field]: nValue,
       });
     },
     [field, form]
@@ -80,9 +86,9 @@ const FormItemWrapper = <FormDataType extends { [key: string]: any }>(
   if (arrayOf && arrayOf.length > 0) {
     const { component } = formItemSchema;
     const { Element, props } = component;
-    form.getFieldDecorator(field, { initialValue: [] });
-    console.log('fieldValue', form.getFieldsValue()[field])
+
     const fieldValue = form.getFieldsValue()[field] || [];
+    // const fieldValue = [{}, {}, {}];
     return (
       <Element {...props} onAdd={onArrayItemAdd} onDel={onArrayItemDel}>
         {fieldValue.map((fieldValueItem: any, index: number) => {
@@ -106,11 +112,16 @@ const FormItemWrapper = <FormDataType extends { [key: string]: any }>(
 
   // 开始处理渲染内容
   const { getFieldDecorator } = form;
-
-  return getFieldDecorator(prefixPath.concat(field).join('.'), {
+  const resultFieldName = prefixPath.concat(field).join('.');
+console.log('resultFieldName', resultFieldName)
+  return getFieldDecorator(resultFieldName, {
     rules,
   })(
-    <FormItemInterceptor {...props} disabled={disabledResult} />
+    <FormItemInterceptor
+      {...props}
+      disabled={disabledResult}
+      prefixPath={prefixPath}
+    />
   ) as JSX.Element;
 };
 
