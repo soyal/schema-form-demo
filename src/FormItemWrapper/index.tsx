@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormItemSchema, FormSchema } from '@/typings/schema';
-import { FormArrayOfWrapper } from '@/typings/form'
+import { FormArrayOfWrapper } from '@/typings/form';
 import FormItemInterceptor from './FormItemInterceptor';
 import Form, { FormInstance } from 'rc-field-form';
 import { ListField } from 'rc-field-form/es/List';
@@ -10,13 +10,14 @@ export interface FormWrapperProps<FormDataType> {
   formItemSchema: FormItemSchema<FormDataType>;
   formSchema: FormSchema<FormDataType>;
   listField?: ListField;
+  listName?: string;
   form: FormInstance;
 }
 
 const FormItemWrapper = <FormDataType extends { [key: string]: any }>(
   props: FormWrapperProps<FormDataType>
 ) => {
-  const { formItemSchema, formSchema, listField, form } = props;
+  const { formItemSchema, formSchema, listField, form, listName } = props;
   const { dataStore } = formSchema;
   const {
     field,
@@ -59,7 +60,7 @@ const FormItemWrapper = <FormDataType extends { [key: string]: any }>(
     const { component, rules } = formItemSchema;
     const { Element, props } = component;
 
-    const ResultElement = Element as React.FC<FormArrayOfWrapper>
+    const ResultElement = Element as React.FC<FormArrayOfWrapper>;
 
     return (
       <List name={field} initialValue={[]} rules={rules}>
@@ -76,6 +77,7 @@ const FormItemWrapper = <FormDataType extends { [key: string]: any }>(
                         formSchema={formSchema}
                         listField={fieldItem}
                         form={form}
+                        listName={field}
                       />
                     ))}
                   </div>
@@ -89,16 +91,17 @@ const FormItemWrapper = <FormDataType extends { [key: string]: any }>(
   }
 
   // 开始处理渲染内容
+  const fieldName = listField ? [listField.name, field] : field;
   return (
     <Field
       {...listField}
-      name={field}
+      name={fieldName}
       rules={rules}
       initialValue={initialValue}
     >
       <FormItemInterceptor
         {...props}
-        listField={listField}
+        name={listName ? [listName].concat(fieldName as any[]) : fieldName}
         disabled={disabledResult}
         form={form}
       />

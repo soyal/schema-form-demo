@@ -23,8 +23,7 @@ const SchemaForm = <FormDataType extends {} = any>({
   }, [formData]);
 
   const handleSubmit = useCallback(
-    (e) => {
-      e.preventDefault();
+    () => {
       form.validateFields().then(
         (values) => {
           console.log('Received values of form: ', values);

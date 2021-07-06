@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormItemProps, FormArrayOfWrapper } from './form';
-import { ValidatorRule } from 'rc-field-form/es/interface';
+import { ValidatorRule, NamePath } from 'rc-field-form/es/interface';
 
 export interface FormSchema<FormDataType = any> {
   formId: string; // 打点字段
@@ -42,9 +42,12 @@ export interface FormItemSchema<FormDataType = any> {
   // 影响表单值的操作
   updateFormValue?: [
     {
-      timing: 'onChange' | 'onBlur' | 'onFocus';
+      timing: 'onChange'; // 暂时只支持onChange
       updator: (
-        setFieldsValue: (fieldsValue: { [field: string]: any }) => void,
+        operations: {
+          setFieldsValue: (fieldsValue: { [field: string]: any }) => void;
+          resetFields: (fields: NamePath[]) => void;
+        },
         currValue: any,
         formData: FormDataType,
         dataStore?: DataStore

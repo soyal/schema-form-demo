@@ -7,7 +7,6 @@ const AtomInput = ({ value, onChange }: FormItemProps<string>) => {
     <Input
       value={value}
       onChange={(e) => {
-        debugger
         onChange(e.target.value);
       }}
     ></Input>

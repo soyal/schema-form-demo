@@ -6,7 +6,7 @@ import Input from 'antd/es/input';
 import Radio from 'antd/es/radio';
 import Button from 'antd/es/button';
 import ArrayOfWrapper from './components/FieldWrapper';
-import AtomInput from './components/AtomInput'
+import AtomInput from './components/AtomInput';
 
 // test
 
@@ -45,13 +45,8 @@ const Template: Story<IProps> = () => {
         updateFormValue: [
           {
             timing: 'onChange',
-            updator: (setFieldsValue, currValue, formData) => {
+            updator: ({ resetFields }, currValue, formData) => {
               console.log('updator', formData);
-              if (formData['name'] === 'sss') {
-                setFieldsValue({
-                  os: 'others',
-                });
-              }
             },
           },
         ],
@@ -105,12 +100,17 @@ const Template: Story<IProps> = () => {
                 placeholder: '请输入B',
               },
             },
-            updateFormValue: [{
-              timing: 'onChange',
-              updator: (setFieldsValue, currValue, formData) => {
-                debugger
-              }
-            }]
+            updateFormValue: [
+              {
+                timing: 'onChange',
+                updator: ({ resetFields }, currValue, formData) => {
+                  debugger
+                  if (currValue.target.value === '111') {
+                    resetFields(['name']);
+                  }
+                },
+              },
+            ],
           },
         ],
       },
