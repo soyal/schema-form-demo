@@ -14,6 +14,17 @@ const FieldWrapper = (props: FormArrayOfWrapper) => {
         >
           添加子项
         </span>
+
+        <span
+          style={{
+            color: 'red',
+          }}
+          onClick={() => {
+            onDel(children.length - 1);
+          }}
+        >
+          删除最后一项
+        </span>
       </div>
     </div>
   );

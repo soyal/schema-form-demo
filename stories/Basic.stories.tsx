@@ -103,6 +103,12 @@ const Template: Story<IProps> = () => {
                 placeholder: '请输入B',
               },
             },
+            updateFormValue: [{
+              timing: 'onChange',
+              updator: (setFieldsValue, currValue, formData) => {
+                debugger
+              }
+            }]
           },
         ],
       },

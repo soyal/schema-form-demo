@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { FormItemSchema, FormSchema } from '@/typings/schema';
 import FormItemInterceptor from './FormItemInterceptor';
 import { WrappedFormMethods } from 'rc-form';
@@ -19,7 +19,6 @@ const FormItemWrapper = <FormDataType extends { [key: string]: any }>(
 
   // to fix antd3's warning, relate to issue: https://github.com/ant-design/ant-design/issues/11205
   const getFieldValueX = (form: WrappedFormMethods, field: string) => {
-    console.log('field path', field);
     return form.getFieldsValue()[field];
   };
 
@@ -31,13 +30,9 @@ const FormItemWrapper = <FormDataType extends { [key: string]: any }>(
       form.getFieldDecorator(`${field}[${originFiledValue.length}]`, {
         initialValue: itemInitialValue,
       });
-      const nValue = getFieldValueX(form, field);
-      console.log('afater getFieldDecorator', nValue);
 
       // 只是为了触发更新
-      form.setFieldsValue({
-        [field]: nValue,
-      });
+      form.setFieldsValue({});
     },
     [field, form]
   );
@@ -91,7 +86,8 @@ const FormItemWrapper = <FormDataType extends { [key: string]: any }>(
     // const fieldValue = [{}, {}, {}];
     return (
       <Element {...props} onAdd={onArrayItemAdd} onDel={onArrayItemDel}>
-        {fieldValue.map((fieldValueItem: any, index: number) => {
+        {/* tslint-disable */}
+        {fieldValue.map((_: any, index: number) => {
           return (
             <div key={index}>
               {arrayOf.map((nestedSchemaItem) => (
@@ -113,7 +109,7 @@ const FormItemWrapper = <FormDataType extends { [key: string]: any }>(
   // 开始处理渲染内容
   const { getFieldDecorator } = form;
   const resultFieldName = prefixPath.concat(field).join('.');
-console.log('resultFieldName', resultFieldName)
+
   return getFieldDecorator(resultFieldName, {
     rules,
   })(

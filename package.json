@@ -22,7 +22,6 @@
     "build-storybook": "build-storybook"
   },
   "peerDependencies": {
-    "antd": "3",
     "react": ">=16"
   },
   "husky": {
@@ -71,6 +70,6 @@
     "typescript": "^4.3.5"
   },
   "dependencies": {
-    "rc-form": "^2.4.12"
+    "rc-field-form": "^1.21.1"
   }
 }

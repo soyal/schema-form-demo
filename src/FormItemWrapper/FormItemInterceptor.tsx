@@ -10,6 +10,7 @@ interface FormItemInterceptorProps<FormDataType>
   onChange?: (value: any) => void;
   value?: any;
   disabled?: boolean;
+  prefixPath?: string[];
 }
 
 class FormItemInterceptor<FormDataType> extends React.Component<
@@ -32,6 +33,7 @@ class FormItemInterceptor<FormDataType> extends React.Component<
       onChange,
       formSchema,
       disabled,
+      prefixPath,
     } = this.props;
 
     const { component, updateFormValue, label, field } = formItemSchema;
@@ -40,10 +42,7 @@ class FormItemInterceptor<FormDataType> extends React.Component<
     const { dataStore } = formSchema;
 
     // 提取changeFormValue的类型
-    type changerType = Exclude<
-      typeof updateFormValue,
-      undefined
-    >[0]['updator'];
+    type changerType = Exclude<typeof updateFormValue, undefined>[0]['updator'];
 
     const hooks = {
       onChange: [] as changerType[],
@@ -73,7 +72,14 @@ class FormItemInterceptor<FormDataType> extends React.Component<
           onChange && onChange(nValue);
           if (hooks.onChange.length > 0) {
             hooks.onChange.forEach((fn) => {
-              const formData = form.getFieldsValue() as any;
+              let formData = null;
+              if (prefixPath && prefixPath.length > 0) {
+                // 如果是嵌套的路径，则formData为整个对象
+                // 比如该字段为songList[0].name，则得到的formData为songList[0]
+                formData = form.getFieldValue(prefixPath.join('.'));
+              } else {
+                formData = form.getFieldsValue() as any;
+              }
               fn(setFieldsValue, nValue, formData, dataStore);
             });
           }
