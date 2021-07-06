@@ -1,54 +1,21 @@
 import React, { useCallback } from 'react';
 import { FormItemSchema, FormSchema } from '@/typings/schema';
 import FormItemInterceptor from './FormItemInterceptor';
-import { WrappedFormMethods } from 'rc-form';
+import Form, { useForm } from 'rc-field-form';
 
+const { List } = Form
 export interface FormWrapperProps<FormDataType> {
   formItemSchema: FormItemSchema<FormDataType>;
   formSchema: FormSchema<FormDataType>;
-  form: WrappedFormMethods;
-  prefixPath?: string[];
 }
 
 const FormItemWrapper = <FormDataType extends { [key: string]: any }>(
   props: FormWrapperProps<FormDataType>
 ) => {
-  const { formItemSchema, formSchema, form, prefixPath = [] } = props;
+  const { formItemSchema, formSchema } = props;
   const { dataStore } = formSchema;
   const { field, visible, disabled, rules, arrayOf = [] } = formItemSchema;
-
-  // to fix antd3's warning, relate to issue: https://github.com/ant-design/ant-design/issues/11205
-  const getFieldValueX = (form: WrappedFormMethods, field: string) => {
-    return form.getFieldsValue()[field];
-  };
-
-  const onArrayItemAdd = useCallback(
-    (itemInitialValue: any) => {
-      const originFiledValue = getFieldValueX(form, field) || [];
-
-      // 只有通过这种方式才能注册songList[0] = {} 这种嵌套变量
-      form.getFieldDecorator(`${field}[${originFiledValue.length}]`, {
-        initialValue: itemInitialValue,
-      });
-
-      // 只是为了触发更新
-      form.setFieldsValue({});
-    },
-    [field, form]
-  );
-
-  const onArrayItemDel = useCallback(
-    (itemIndex: number) => {
-      const nArray = (getFieldValueX(form, field) || []).slice();
-      nArray.splice(itemIndex, 1);
-      form.setFieldsValue({ [field]: nArray });
-    },
-    [field, form]
-  );
-
-  if (prefixPath.length > 0 && arrayOf.length > 0) {
-    throw new Error('暂不支持两层以上的嵌套');
-  }
+  const [form] = useForm();
 
   // is visible
   let visibleResult = true;
@@ -82,8 +49,10 @@ const FormItemWrapper = <FormDataType extends { [key: string]: any }>(
     const { component } = formItemSchema;
     const { Element, props } = component;
 
-    const fieldValue = form.getFieldsValue()[field] || [];
-    // const fieldValue = [{}, {}, {}];
+    const fieldValue = form.getFieldValue(field);
+    
+    
+
     return (
       <Element {...props} onAdd={onArrayItemAdd} onDel={onArrayItemDel}>
         {/* tslint-disable */}

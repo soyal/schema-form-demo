@@ -1,10 +1,9 @@
 import React, { useEffect, useCallback } from 'react';
 import { FormProps } from '@/typings/form';
 import FormItemWrapper from './FormItemWrapper';
-import { createForm, WrappedFormMethods } from 'rc-form';
+import Form, { useForm } from 'rc-field-form';
 
 export type IProps<FormDataType = any> = FormProps<FormDataType> & {
-  form: WrappedFormMethods;
   children: JSX.Element;
 };
 
@@ -12,10 +11,10 @@ const SchemaForm = <FormDataType extends {} = any>({
   schema,
   formData, // 用于初始化
   onSubmit,
-  form,
   children,
 }: IProps<FormDataType>) => {
   const { formId, formLabel, formItems } = schema;
+  const [form] = useForm();
 
   useEffect(() => {
     if (formData) {
@@ -26,22 +25,25 @@ const SchemaForm = <FormDataType extends {} = any>({
   const handleSubmit = useCallback(
     (e) => {
       e.preventDefault();
-      form.validateFields((err, values) => {
-        if (!err) {
+      form.validateFields().then(
+        (values) => {
           console.log('Received values of form: ', values);
-          debugger
           onSubmit(values);
+        },
+        (err) => {
+          console.error(err);
         }
-      });
+      );
     },
     [form]
   );
 
   return (
-    <form
+    <Form
       data-msform-id={formId}
       data-msform-label={formLabel}
-      onSubmit={handleSubmit}
+      onFinish={handleSubmit}
+      form={form}
     >
       {formItems.map((formItem) => (
         <FormItemWrapper
@@ -53,10 +55,8 @@ const SchemaForm = <FormDataType extends {} = any>({
       ))}
 
       {children}
-    </form>
+    </Form>
   );
 };
 
-const FormComponent = createForm<IProps>()(SchemaForm);
-
-export default FormComponent;
+export default SchemaForm;
