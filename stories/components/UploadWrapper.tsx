@@ -37,7 +37,7 @@ const FieldWrapper: React.FC<FormArrayOfWrapper> = ({
                 display: 'flex',
                 justifyContent: 'space-between',
                 border: '1px solid #999',
-                background: '#eee',
+                background: index === activeIndex ? '#acacac' : '#eee',
                 cursor: 'pointer',
               }}
             >
@@ -69,18 +69,25 @@ const FieldWrapper: React.FC<FormArrayOfWrapper> = ({
       <div
         style={{
           marginLeft: 100,
+          flexGrow: 1,
         }}
       >
         {children.length > 0 ? (
-          <div
-            style={{
-              padding: 30,
-              border: '1px solid #ccc',
-            }}
-          >
-            {children.find((child, index) => index === activeIndex)}
-          </div>
-        ): (
+          children.map((child, index) => {
+            return (
+              <div
+                key={index}
+                style={{
+                  padding: 30,
+                  border: '1px solid #ccc',
+                  display: index === activeIndex ? 'block' : 'none',
+                }}
+              >
+                {child}
+              </div>
+            );
+          })
+        ) : (
           <div>无上传歌曲</div>
         )}
       </div>

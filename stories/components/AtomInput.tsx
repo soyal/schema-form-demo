@@ -6,7 +6,7 @@ const AtomInput = ({
   value,
   onChange,
   placeholder,
-}: FormItemProps<string> & { placeholder: string }) => {
+}: FormItemProps<string> & { placeholder?: string }) => {
   return (
     <Input
       value={value}

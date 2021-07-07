@@ -5,6 +5,7 @@
 import React from 'react';
 import { FormWrapperProps } from './index';
 import { FormItemProps } from '@/typings/form';
+import { getFormData } from './util';
 
 interface FormItemInterceptorProps extends FormWrapperProps<any> {
   onChange?: (value: any) => void;
@@ -58,16 +59,10 @@ const FormItemInterceptor = ({
       // onChange联动
       onChange={(nValue: any) => {
         onChange && onChange(nValue);
+
         if (hooks.onChange.length > 0) {
           hooks.onChange.forEach((fn) => {
-            let formData = null;
-            if (typeof name === 'string') {
-              formData = form.getFieldsValue();
-            } else {
-              // 当在嵌套的子表单内时候，formData为子表单的内容
-              const parentNamePath = name.slice(0, name.length - 1);
-              formData = form.getFieldValue(parentNamePath);
-            }
+            const formData = getFormData(form, name);
 
             fn({ setFieldsValue, resetFields }, nValue, formData, dataStore);
           });

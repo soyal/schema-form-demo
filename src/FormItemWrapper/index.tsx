@@ -4,13 +4,14 @@ import { FormArrayOfWrapper } from '@/typings/form';
 import FormItemInterceptor from './FormItemInterceptor';
 import Form, { FormInstance } from 'rc-field-form';
 import { ListField } from 'rc-field-form/es/List';
+import { getFormData } from './util';
 
 const { List, Field } = Form;
 export interface FormWrapperProps<FormDataType> {
   formItemSchema: FormItemSchema<FormDataType>;
   formSchema: FormSchema<FormDataType>;
   listField?: ListField;
-  listName?: string;
+  listName?: string; // Form.List组件上注册的name
   form: FormInstance;
 }
 
@@ -28,16 +29,19 @@ const FormItemWrapper = <FormDataType extends { [key: string]: any }>(
     initialValue,
   } = formItemSchema;
 
+  const fieldName = listField ? [listField.name, field] : field; // 局部路径名 0.albumType
+  const formItemFullName = listName
+    ? [listName].concat(fieldName as any[])
+    : fieldName; // 完成的路径名，e.g: songList[0].albumType
+
+  const formData = getFormData(form, formItemFullName); // 全局formData或者是nested formData
+
   // is visible
   let visibleResult = true;
   if (typeof visible === 'boolean') {
     visibleResult = visible;
   } else if (typeof visible === 'function') {
-    visibleResult = visible(
-      form.getFieldValue(field),
-      form.getFieldsValue(),
-      dataStore
-    );
+    visibleResult = visible(form.getFieldValue(field), formData, dataStore);
   }
 
   // is disabled
@@ -45,11 +49,7 @@ const FormItemWrapper = <FormDataType extends { [key: string]: any }>(
   if (typeof disabled === 'boolean') {
     disabledResult = disabled;
   } else if (typeof disabled === 'function') {
-    disabledResult = disabled(
-      form.getFieldValue(field),
-      form.getFieldsValue(),
-      dataStore
-    );
+    disabledResult = disabled(form.getFieldValue(field), formData, dataStore);
   }
 
   // if  invisible, do not render
@@ -60,7 +60,7 @@ const FormItemWrapper = <FormDataType extends { [key: string]: any }>(
     const { component, rules } = formItemSchema;
     const { Element, props } = component;
 
-    const ResultElement = Element as React.FC<FormArrayOfWrapper>
+    const ResultElement = Element as React.FC<FormArrayOfWrapper>;
     return (
       <List name={field} initialValue={[]} rules={rules}>
         {(fieldItems, { add, remove }) => {
@@ -96,7 +96,6 @@ const FormItemWrapper = <FormDataType extends { [key: string]: any }>(
   }
 
   // 开始处理渲染内容
-  const fieldName = listField ? [listField.name, field] : field;
   return (
     <Field
       {...listField}
@@ -106,7 +105,7 @@ const FormItemWrapper = <FormDataType extends { [key: string]: any }>(
     >
       <FormItemInterceptor
         {...props}
-        name={listName ? [listName].concat(fieldName as any[]) : fieldName}
+        name={formItemFullName}
         disabled={disabledResult}
         form={form}
       />
