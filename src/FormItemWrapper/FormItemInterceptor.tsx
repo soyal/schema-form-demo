@@ -2,7 +2,7 @@
  * 处于antd form getFieldDecorator与Element之间的数据拦截层
  * 用于处理联动逻辑
  */
-import React, { useState } from 'react';
+import React from 'react';
 import { FormWrapperProps } from './index';
 import { FormItemProps } from '@/typings/form';
 

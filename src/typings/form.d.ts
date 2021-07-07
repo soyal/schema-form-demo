@@ -17,6 +17,7 @@ export interface FormItemProps<ValueType = any> {
 }
 
 export interface FormArrayOfWrapper {
+  value: any[];
   add: (itemInitialValue: any) => void;
   remove: (itemIndex: number) => void;
   children: JSX.Element[];

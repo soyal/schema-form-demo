@@ -60,13 +60,18 @@ const FormItemWrapper = <FormDataType extends { [key: string]: any }>(
     const { component, rules } = formItemSchema;
     const { Element, props } = component;
 
-    const ResultElement = Element as React.FC<FormArrayOfWrapper>;
-
+    const ResultElement = Element as React.FC<FormArrayOfWrapper>
     return (
       <List name={field} initialValue={[]} rules={rules}>
         {(fieldItems, { add, remove }) => {
+          const listValue = form.getFieldValue(field) || [];
           return (
-            <ResultElement {...props} add={add} remove={remove}>
+            <ResultElement
+              {...props}
+              add={add}
+              remove={remove}
+              value={listValue}
+            >
               {fieldItems.map((fieldItem) => {
                 return (
                   <div key={fieldItem.name}>
