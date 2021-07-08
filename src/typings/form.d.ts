@@ -8,6 +8,7 @@ export interface FormProps<FormDataType> {
 
 export interface FormItemProps<ValueType = any> {
   onChange: (nValue: ValueType) => void; // required to implement
+  getvalue: (prop: string) => any;
   value?: ValueType; // required to implement
   label?: string;
   field?: string;

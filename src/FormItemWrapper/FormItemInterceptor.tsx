@@ -6,6 +6,7 @@ import React from 'react';
 import { FormWrapperProps } from './index';
 import { FormItemProps } from '@/typings/form';
 import { getFormData } from './util';
+import { log } from '../invariant';
 
 interface FormItemInterceptorProps extends FormWrapperProps<any> {
   onChange?: (value: any) => void;
@@ -30,12 +31,14 @@ const FormItemInterceptor = ({
     field,
     visible,
     disabled,
+    dependencies = [],
   } = formItemSchema;
   const { Element, props } = component;
   const { setFieldsValue, resetFields } = form;
   const { dataStore } = formSchema;
 
   const formData = getFormData(form, name); // 全局formData或者是nested formData
+
   let nameStr: string;
   if (name instanceof Array) {
     nameStr = name.join('.');
@@ -57,7 +60,7 @@ const FormItemInterceptor = ({
   } else if (typeof visible === 'function') {
     visibleResult = visible(form.getFieldValue(field), formData, dataStore);
   }
-  fieldsStatus[nameStr]['visible'] = visibleResult
+  fieldsStatus[nameStr]['visible'] = visibleResult;
 
   // is disabled
   let disabledResult = false;
@@ -66,8 +69,7 @@ const FormItemInterceptor = ({
   } else if (typeof disabled === 'function') {
     disabledResult = disabled(form.getFieldValue(field), formData, dataStore);
   }
-  fieldsStatus[nameStr]['disabled'] = disabledResult
-  
+  fieldsStatus[nameStr]['disabled'] = disabledResult;
 
   // if  invisible, do not render
   if (!visibleResult) return null;
@@ -100,6 +102,15 @@ const FormItemInterceptor = ({
       value={value}
       label={label}
       field={field}
+      getvalue={(prop: string) => {
+        if (!dependencies.includes(prop)) {
+          log.error(
+            `you haven't declare the field ${prop} as dependencies of ${field}`
+          );
+          return null;
+        }
+        return formData[prop];
+      }}
       // onChange联动
       onChange={(nValue: any) => {
         onChange && onChange(nValue);
