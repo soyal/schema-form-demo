@@ -1,4 +1,4 @@
-import { FormItemSchema } from '../../src/typings/schema';
+import { FormItemSchema } from '../../../src/typings/schema';
 import AutoSelect from '../components/AtomSelect';
 
 const schemaItem: FormItemSchema = {

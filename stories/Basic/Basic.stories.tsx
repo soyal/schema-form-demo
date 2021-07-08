@@ -1,6 +1,6 @@
 import React from 'react';
 import { Meta } from '@storybook/react';
-import SchemaForm, { IProps } from '../src';
+import SchemaForm, { IProps } from '../../src';
 import Button from 'antd/es/button';
 import fieldItemSchemas from './FieldItems';
 import 'antd/dist/antd.css';

@@ -1,8 +1,11 @@
 import React from 'react';
 import { Meta } from '@storybook/react';
-import SchemaForm, { IProps } from '../src';
+import SchemaForm, { IProps } from '../../src';
 import Button from 'antd/es/button';
-import fieldItemSchemas from './FieldItems';
+import Input from 'antd/es/input';
+import { FormSchema } from '../../src/typings/schema';
+import PhoneOS from './FormItems/PhoneOS';
+import FormItemWrapper from '../components/FormItemWrapper';
 import 'antd/dist/antd.css';
 
 // test
@@ -32,12 +35,37 @@ const Template = (args: IProps) => {
 // https://storybook.js.org/docs/react/workflows/unit-testing
 export const Default = Template.bind({});
 
+const schema: FormSchema = {
+  formId: 'dynamicStatus',
+  formLabel: '动态状态校验表单',
+  formItems: [
+    {
+      initialValue: 'ios',
+      field: 'phoneos',
+      label: '手机操作系统',
+      component: {
+        Element: FormItemWrapper(PhoneOS),
+      },
+    },
+    {
+      dependencies: ['phoneos'],
+      visible: (value, formData) => {
+        return formData.phoneos !== 'other'
+      },
+      field: 'osversion',
+      label: '版本号输入',
+      component: {
+        Element: FormItemWrapper(Input),
+        props: {
+          placeholder: '请输入版本号',
+        },
+      },
+    },
+  ],
+};
+
 Default.args = {
-  schema: {
-    formLabel: '作品上传表单',
-    formId: 'uploadSongForm',
-    formItems: fieldItemSchemas,
-  },
+  schema,
   formData: {},
   onSubmit: (values) => {
     console.log('values:', values);

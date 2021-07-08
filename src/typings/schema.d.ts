@@ -23,6 +23,7 @@ export interface FormItemSchema<FormDataType = any> {
   field: string; // 字段名
   label: string; // 字段中文解释
   initialValue?: any; // 表单项初始值
+  dependencies?: string[]; // field[] 当前字段依赖的其他字段，默认情况下，其他字段的更新不会引发当前字段所对应组件的更新，当设置dependencies后，依赖的字段更新后，该表单项会触发更新
   // 调用的组件
   component: {
     // 强制入参参考FormItemProps

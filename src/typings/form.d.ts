@@ -11,6 +11,7 @@ export interface FormItemProps<ValueType = any> {
   value?: ValueType; // required to implement
   label?: string;
   field?: string;
+  required?: boolean;
   disabled?: boolean; // required to implement
   onBlur?: (value: ValueType) => void;
   onFocus?: (value: ValueType) => void;
@@ -22,3 +23,10 @@ export interface FormArrayOfWrapper {
   remove: (itemIndex: number) => void;
   children: JSX.Element[];
 }
+
+export type TFieldStatus = {
+  [key: string]: {
+    visible: boolean;
+    disabled: boolean;
+  };
+};

@@ -19,14 +19,58 @@ const FormItemInterceptor = ({
   value,
   onChange,
   formSchema,
-  disabled,
   name,
   form,
+  fieldsStatus,
 }: FormItemInterceptorProps) => {
-  const { component, updateFormValue, label, field } = formItemSchema;
+  const {
+    component,
+    updateFormValue,
+    label,
+    field,
+    visible,
+    disabled,
+  } = formItemSchema;
   const { Element, props } = component;
   const { setFieldsValue, resetFields } = form;
   const { dataStore } = formSchema;
+
+  const formData = getFormData(form, name); // 全局formData或者是nested formData
+  let nameStr: string;
+  if (name instanceof Array) {
+    nameStr = name.join('.');
+  } else {
+    nameStr = name;
+  }
+console.log('fieldStatus', nameStr, fieldsStatus[nameStr])
+  if (!fieldsStatus[nameStr]) {
+    fieldsStatus[nameStr] = {
+      visible: true,
+      disabled: false,
+    };
+  }
+
+  // is visible
+  let visibleResult = true;
+  if (typeof visible === 'boolean') {
+    visibleResult = visible;
+  } else if (typeof visible === 'function') {
+    visibleResult = visible(form.getFieldValue(field), formData, dataStore);
+  }
+  fieldsStatus[nameStr]['visible'] = visibleResult
+
+  // is disabled
+  let disabledResult = false;
+  if (typeof disabled === 'boolean') {
+    disabledResult = disabled;
+  } else if (typeof disabled === 'function') {
+    disabledResult = disabled(form.getFieldValue(field), formData, dataStore);
+  }
+  fieldsStatus[nameStr]['disabled'] = disabledResult
+  
+
+  // if  invisible, do not render
+  if (!visibleResult) return null;
 
   // 提取changeFormValue的类型
   type changerType = Exclude<typeof updateFormValue, undefined>[0]['updator'];
@@ -52,7 +96,7 @@ const FormItemInterceptor = ({
 
   return (
     <ResultElement
-      disabled={disabled}
+      disabled={disabledResult}
       value={value}
       label={label}
       field={field}

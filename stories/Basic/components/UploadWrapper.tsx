@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FormArrayOfWrapper } from '../../src/typings/form';
+import { FormArrayOfWrapper } from '../../../src/typings/form';
 import Button from 'antd/es/button';
 
 const FieldWrapper: React.FC<FormArrayOfWrapper> = ({

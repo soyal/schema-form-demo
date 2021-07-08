@@ -1,6 +1,6 @@
 import React from 'react';
 import Input from 'antd/es/input';
-import { FormItemProps } from '../../src/typings/form';
+import { FormItemProps } from '../../../src/typings/form';
 
 const AtomInput = ({
   value,

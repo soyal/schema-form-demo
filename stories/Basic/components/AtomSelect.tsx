@@ -1,6 +1,6 @@
 import React from 'react';
 import Select from 'antd/es/select';
-import { FormItemProps } from '../../src/typings/form';
+import { FormItemProps } from '../../../src/typings/form';
 
 const { Option } = Select;
 
