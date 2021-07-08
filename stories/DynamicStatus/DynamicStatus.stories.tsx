@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Meta } from '@storybook/react';
-import SchemaForm, { IProps } from '../../src';
+import SchemaForm, { SchemaFormInstance, FormProps } from '../../src';
 import Button from 'antd/es/button';
 import Input from 'antd/es/input';
 import { FormSchema } from '../../src/typings/schema';
@@ -27,8 +27,19 @@ const meta: Meta = {
 
 export default meta;
 
-const Template = (args: IProps) => {
-  return <SchemaForm {...args} />;
+const Template = (args: FormProps) => {
+  const formRef = useRef<SchemaFormInstance | null>(null)
+
+  return (
+    <div>
+      <SchemaForm {...args} formRef={formRef} />
+
+      <Button onClick={() => {
+        const values = formRef.current.getFieldsValue()
+        console.log('values', values)
+      }}>获取表单值</Button>
+    </div>
+  );
 };
 
 // By passing using the Args format for exported stories, you can control the props for a component for reuse in a test

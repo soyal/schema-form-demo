@@ -1,6 +1,6 @@
 import React from 'react';
 import { Meta } from '@storybook/react';
-import SchemaForm, { IProps } from '../../src';
+import SchemaForm, { FormProps } from '../../src';
 import Button from 'antd/es/button';
 import fieldItemSchemas from './FieldItems';
 import 'antd/dist/antd.css';
@@ -24,7 +24,7 @@ const meta: Meta = {
 
 export default meta;
 
-const Template = (args: IProps) => {
+const Template = (args: FormProps) => {
   return <SchemaForm {...args} />;
 };
 
