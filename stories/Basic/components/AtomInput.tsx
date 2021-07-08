@@ -6,9 +6,11 @@ const AtomInput = ({
   value,
   onChange,
   placeholder,
+  disabled,
 }: FormItemProps<string> & { placeholder?: string }) => {
   return (
     <Input
+      disabled={disabled}
       value={value}
       placeholder={placeholder}
       onChange={(e) => {

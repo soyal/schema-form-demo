@@ -42,7 +42,7 @@ const FormItemInterceptor = ({
   } else {
     nameStr = name;
   }
-console.log('fieldStatus', nameStr, fieldsStatus[nameStr])
+
   if (!fieldsStatus[nameStr]) {
     fieldsStatus[nameStr] = {
       visible: true,

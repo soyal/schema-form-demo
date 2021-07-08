@@ -5,11 +5,11 @@ const schemaItem: FormItemSchema = {
   label: '歌曲名',
   field: 'songName',
   dependencies: ['songType'],
-  visible: (value, formData: any) => {
-    return formData['songType'] !== 'fanchang'
-  },
+  // visible: (value, formData: any) => {
+  //   return formData['songType'] !== 'fanchang'
+  // },
   disabled: (value, formData: any) => {
-    return formData['songType'] !== 'origin'
+    return formData['songType'] !== 'fanchang'
   },
   component: {
     Element: AutoInput,

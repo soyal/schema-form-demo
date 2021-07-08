@@ -3,6 +3,7 @@ import { FormProps } from '@/typings/form';
 import FormItemWrapper from './FormItemWrapper';
 import Form, { useForm } from 'rc-field-form';
 import { TFieldStatus } from '@/typings/form';
+import { filterInvisibleFields } from './util';
 
 export type IProps<FormDataType = any> = FormProps<FormDataType> & {
   children: JSX.Element;
@@ -31,9 +32,8 @@ const SchemaForm = <FormDataType extends {} = any>({
   const handleSubmit = useCallback(() => {
     form.validateFields().then(
       (values) => {
-        console.log('Received values of form: ', values);
-        console.log('submit', refConstant.current.fieldsStatus)
-        onSubmit(values);
+        const { fieldsStatus } = refConstant.current;
+        onSubmit(filterInvisibleFields(values, fieldsStatus));
       },
       (err) => {
         console.error(err);
