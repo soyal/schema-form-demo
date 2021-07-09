@@ -2,9 +2,9 @@ import React, { useRef } from 'react';
 import { Meta } from '@storybook/react';
 import SchemaForm, { SchemaFormInstance, FormProps } from '../../src';
 import Button from 'antd/es/button';
-import Input from 'antd/es/input';
 import { FormSchema } from '../../src/typings/schema';
 import PhoneOS from './FormItems/PhoneOS';
+import PhoneVersion from './FormItems/PhoneVersion'
 import FormItemWrapper from '../components/FormItemWrapper';
 import 'antd/dist/antd.css';
 
@@ -67,7 +67,7 @@ const schema: FormSchema = {
       field: 'osversion',
       label: '版本号输入',
       component: {
-        Element: FormItemWrapper(Input),
+        Element: FormItemWrapper(PhoneVersion),
         props: {
           placeholder: '请输入版本号',
         },
