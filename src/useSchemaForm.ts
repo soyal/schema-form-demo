@@ -23,8 +23,8 @@ export class SchemaFormInstance {
     return filteredValues;
   }
 
-  setFieldsStatus(fieldsStatus: TFieldStatus) {
-    this.fieldsStatus = fieldsStatus;
+  validateFields() {
+    this.rcForm.validateFields();
   }
 }
 

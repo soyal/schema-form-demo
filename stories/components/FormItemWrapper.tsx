@@ -3,13 +3,13 @@ import { FormItemProps } from '../../src/typings/form';
 
 export default function FormItemWrapper(WrappedComponent) {
   const FormItem: React.FC<FormItemProps> = (props) => {
-    const { required, label } = props;
+    const { required, label, validateMeta } = props;
 
     return (
       <div
         style={{
           display: 'flex',
-          marginBottom: 12
+          marginBottom: 12,
         }}
       >
         <div
@@ -37,6 +37,10 @@ export default function FormItemWrapper(WrappedComponent) {
           }}
         >
           <WrappedComponent {...props} />
+
+          {validateMeta.errors.map((errStr, index) => (
+            <div key={index}>{errStr}</div>
+          ))}
         </div>
       </div>
     );

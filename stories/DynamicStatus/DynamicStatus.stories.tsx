@@ -5,8 +5,10 @@ import Button from 'antd/es/button';
 import { FormSchema } from '../../src/typings/schema';
 import PhoneOS from './FormItems/PhoneOS';
 import PhoneVersion from './FormItems/PhoneVersion';
+import PhoneNum from './FormItems/PhoneNum';
 import FormItemWrapper from '../components/FormItemWrapper';
 import 'antd/dist/antd.css';
+import Form from 'rc-field-form/es/Form';
 
 const meta: Meta = {
   title: '动态状态',
@@ -26,11 +28,13 @@ const meta: Meta = {
 export default meta;
 
 const Template = (args: SchemaFormProps) => {
-  const [schemaForm] = useSchemaForm()
+  const [schemaForm] = useSchemaForm();
 
   return (
     <div>
-      <SchemaForm {...args} schemaForm={schemaForm} />
+      <SchemaForm {...args} schemaForm={schemaForm}>
+        <Button htmlType="submit" type="primary">提交表单</Button>
+      </SchemaForm>
 
       <Button
         onClick={() => {
@@ -39,6 +43,14 @@ const Template = (args: SchemaFormProps) => {
         }}
       >
         获取表单值
+      </Button>
+
+      <Button
+        onClick={() => {
+          schemaForm.validateFields();
+        }}
+      >
+        校验表单
       </Button>
     </div>
   );
@@ -67,9 +79,19 @@ const schema: FormSchema = {
       },
     },
     {
+      rules: [
+        {
+          required: true,
+          message: '必须填写手机系统',
+        },
+        {
+          max: 5,
+          message: '超出最大长度',
+        },
+      ],
       dependencies: ['phoneos'],
       visible: (value, formData) => {
-        console.log('visible tirgger', formData);
+        // console.log('visible tirgger', formData);
         return formData.phoneos === 'ios';
       },
       field: 'osversion',
@@ -78,6 +100,17 @@ const schema: FormSchema = {
         Element: FormItemWrapper(PhoneVersion),
         props: {
           placeholder: '请输入版本号',
+        },
+      },
+    },
+    {
+      field: 'phnoeNum',
+      label: '电话号码',
+      dependencies: ['phoneos'],
+      component: {
+        Element: FormItemWrapper(PhoneNum),
+        props: {
+          placeholder: '请输入电话号码',
         },
       },
     },
@@ -90,17 +123,4 @@ Default.args = {
   onSubmit: (values) => {
     console.log('submit values:', values);
   },
-  children: (
-    <div
-      style={{
-        padding: 30,
-        display: 'flex',
-        justifyContent: 'center',
-      }}
-    >
-      <Button type="primary" htmlType="submit">
-        提交表单
-      </Button>
-    </div>
-  ),
 } as any;

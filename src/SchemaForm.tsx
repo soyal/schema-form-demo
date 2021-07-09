@@ -2,8 +2,7 @@ import React, { useEffect, useCallback } from 'react';
 import { SchemaFormProps } from '@/typings/form';
 import FormItemWrapper from './FormItemWrapper';
 import Form from 'rc-field-form';
-import useSchemaForm from './useSchemaForm'
-
+import useSchemaForm from './useSchemaForm';
 
 const SchemaForm = <FormDataType extends {} = any>({
   schema,
@@ -11,7 +10,7 @@ const SchemaForm = <FormDataType extends {} = any>({
   onSubmit,
   children,
   schemaForm: outterSchemaForm,
-  component
+  component,
 }: SchemaFormProps<FormDataType>) => {
   const { formId, formLabel, formItems } = schema;
   const [schemaForm] = useSchemaForm(outterSchemaForm);
@@ -28,14 +27,15 @@ const SchemaForm = <FormDataType extends {} = any>({
   }, [formData]);
 
   const handleSubmit = useCallback(() => {
-    schemaForm.rcForm.validateFields().then(
-      () => {
+    schemaForm.rcForm
+      .validateFields()
+      .then(() => {
+        console.log("【schema form】submit success")
         onSubmit(schemaForm.getFieldsValue());
-      },
-      (err) => {
+      })
+      .catch((err) => {
         console.error(err);
-      }
-    );
+      });
   }, [schemaForm]);
 
   return (

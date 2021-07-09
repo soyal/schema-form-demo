@@ -7,9 +7,9 @@ interface FormProps<FormDataType> {
   onSubmit: (formData: FormDataType) => void;
 }
 
-export interface FormItemProps<ValueType = any> {
+export interface FormItemProps<ValueType = any, FormDataType = any> {
   onChange: (nValue: ValueType) => void; // required to implement
-  formData: any; // 表单上下文 ，如果是嵌套结果，比如 songList[0].albumType，在albumType这个字段的表单项中，获取的是formData是songList[0]
+  formData: FormDataType; // 表单上下文 ，如果是嵌套结果，比如 songList[0].albumType，在albumType这个字段的表单项中，获取的是formData是songList[0]
   validateMeta: Meta; // validate信息集合
   required: boolean;
   value: ValueType; // required to implement
