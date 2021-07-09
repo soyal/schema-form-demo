@@ -8,6 +8,7 @@ import { filterInvisibleFields } from './util';
 export type IProps<FormDataType = any> = FormProps<FormDataType> & {
   children: JSX.Element;
   formRef?: MutableRefObject<SchemaFormInstance>;
+  component?: string | false | React.ComponentClass<any, any> | React.FC<any>; // 可以自定义form的外层的标签，默认渲染<form>，可自定义，方便用户将SchemaForm嵌套在其他表单中
 };
 
 export type SchemaFormInstance = {
@@ -20,6 +21,7 @@ const SchemaForm = <FormDataType extends {} = any>({
   onSubmit,
   children,
   formRef,
+  component
 }: IProps<FormDataType>) => {
   const { formId, formLabel, formItems } = schema;
   const [form] = useForm();
@@ -68,6 +70,7 @@ const SchemaForm = <FormDataType extends {} = any>({
       data-msform-label={formLabel}
       onFinish={handleSubmit}
       form={form}
+      component={component}
     >
       {formItems.map((formItem) => (
         <FormItemWrapper
