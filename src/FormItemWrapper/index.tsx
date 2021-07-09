@@ -44,12 +44,12 @@ const FormItemWrapper = <FormDataType extends { [key: string]: any }>(
 
   // handle arrayOf
   if (arrayOf && arrayOf.length > 0) {
-    const { component, rules } = formItemSchema;
+    const { component } = formItemSchema;
     const { Element, props } = component;
 
     const ResultElement = Element as React.FC<FormArrayOfWrapper>;
     return (
-      <List name={field} initialValue={[]} rules={rules}>
+      <List name={field} initialValue={[]}>
         {(fieldItems, { add, remove }) => {
           const listValue = form.getFieldValue(field) || [];
           return (
@@ -92,12 +92,16 @@ const FormItemWrapper = <FormDataType extends { [key: string]: any }>(
       initialValue={initialValue}
       dependencies={dependencies?.map((dep) => parentFullPath.concat(dep))}
     >
-      <FormItemInterceptor
-        {...props}
-        name={formItemFullName}
-        form={form}
-        fieldsStatus={fieldsStatus}
-      />
+      {(control, meta) => (
+        <FormItemInterceptor
+          {...props}
+          {...control}
+          validateMeta={meta}
+          name={formItemFullName}
+          form={form}
+          fieldsStatus={fieldsStatus}
+        />
+      )}
     </Field>
   );
 };

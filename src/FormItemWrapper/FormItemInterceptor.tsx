@@ -6,13 +6,15 @@ import React from 'react';
 import { FormWrapperProps } from './index';
 import { FormItemProps } from '@/typings/form';
 import { getFormData } from './util';
-import { log } from '../invariant';
+// import { log } from '../invariant';
+import { Meta } from 'rc-field-form/es/interface';
 
 interface FormItemInterceptorProps extends FormWrapperProps<any> {
   onChange?: (value: any) => void;
   value?: any;
   disabled?: boolean;
   name: string | (string | number)[];
+  validateMeta: Meta;
 }
 
 const FormItemInterceptor = ({
@@ -23,6 +25,7 @@ const FormItemInterceptor = ({
   name,
   form,
   fieldsStatus,
+  validateMeta,
 }: FormItemInterceptorProps) => {
   const {
     component,
@@ -31,12 +34,12 @@ const FormItemInterceptor = ({
     field,
     visible,
     disabled,
-    dependencies = [],
+    // dependencies = [],
+    rules = [],
   } = formItemSchema;
   const { Element, props } = component;
   const { setFieldsValue, resetFields } = form;
   const { dataStore } = formSchema;
-
   const formData = getFormData(form, name); // 全局formData或者是nested formData
 
   let nameStr: string;
@@ -96,21 +99,23 @@ const FormItemInterceptor = ({
 
   const ResultElement = Element as React.FC<FormItemProps>;
 
+  const required = rules.some((rule) => {
+    if (typeof rule === 'object') {
+      return rule.required !== undefined;
+    }
+
+    return false;
+  });
+
   return (
     <ResultElement
       disabled={disabledResult}
       value={value}
       label={label}
       field={field}
-      getvalue={(prop: string) => {
-        if (!dependencies.includes(prop)) {
-          log.error(
-            `you haven't declare the field ${prop} as dependencies of ${field}`
-          );
-          return null;
-        }
-        return formData[prop];
-      }}
+      required={required}
+      validateMeta={validateMeta}
+      formData={formData}
       // onChange联动
       onChange={(nValue: any) => {
         onChange && onChange(nValue);

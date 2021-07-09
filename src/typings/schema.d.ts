@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormItemProps, FormArrayOfWrapper } from './form';
-import { ValidatorRule, NamePath } from 'rc-field-form/es/interface';
+import { Rule, NamePath } from 'rc-field-form/es/interface';
 
 export interface FormSchema<FormDataType = any> {
   formId: string; // 打点字段
@@ -39,7 +39,7 @@ export interface FormItemSchema<FormDataType = any> {
   visible?: boolean | StatusFunc;
   disabled?: boolean | StatusFunc;
   // 可直接参考antd3文档
-  rules?: Array<ValidatorRule>;
+  rules?: Array<Rule>;
   // 影响表单值的操作
   updateFormValue?: [
     {

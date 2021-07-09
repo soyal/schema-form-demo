@@ -1,18 +1,14 @@
-import React, { useEffect, useCallback, useRef, MutableRefObject } from 'react';
+import React, { useEffect, useCallback, useRef } from 'react';
 import { FormProps } from '@/typings/form';
 import FormItemWrapper from './FormItemWrapper';
-import Form, { useForm } from 'rc-field-form';
+import Form, { FormInstance, useForm } from 'rc-field-form';
 import { TFieldStatus } from '@/typings/form';
 import { filterInvisibleFields } from './util';
 
 export type IProps<FormDataType = any> = FormProps<FormDataType> & {
   children: JSX.Element;
-  formRef?: MutableRefObject<SchemaFormInstance>;
+  form?: FormInstance
   component?: string | false | React.ComponentClass<any, any> | React.FC<any>; // 可以自定义form的外层的标签，默认渲染<form>，可自定义，方便用户将SchemaForm嵌套在其他表单中
-};
-
-export type SchemaFormInstance = {
-  getFieldsValue: () => any;
 };
 
 const SchemaForm = <FormDataType extends {} = any>({
@@ -20,11 +16,11 @@ const SchemaForm = <FormDataType extends {} = any>({
   formData, // 用于初始化
   onSubmit,
   children,
-  formRef,
+  form,
   component
 }: IProps<FormDataType>) => {
   const { formId, formLabel, formItems } = schema;
-  const [form] = useForm();
+  const [rcForm] = useForm(form);
   const refConstant = useRef<{
     fieldsStatus: TFieldStatus;
   }>({
@@ -33,27 +29,17 @@ const SchemaForm = <FormDataType extends {} = any>({
 
   useEffect(() => {
     // 在所有field搜集完成后，强制做一次更新，否则visible、disabled这样的状态处理函数无法获取真实的表单数据
-    form.resetFields();
+    rcForm.resetFields();
   }, []);
 
   useEffect(() => {
     if (formData) {
-      form.setFieldsValue(formData);
-    }
-
-    if (formRef) {
-      formRef.current = {
-        getFieldsValue: () => {
-          const values = form.getFieldsValue();
-          const { fieldsStatus } = refConstant.current;
-          onSubmit(filterInvisibleFields(values, fieldsStatus));
-        },
-      };
+      rcForm.setFieldsValue(formData);
     }
   }, [formData]);
 
   const handleSubmit = useCallback(() => {
-    form.validateFields().then(
+    rcForm.validateFields().then(
       (values) => {
         const { fieldsStatus } = refConstant.current;
         onSubmit(filterInvisibleFields(values, fieldsStatus));
@@ -62,14 +48,14 @@ const SchemaForm = <FormDataType extends {} = any>({
         console.error(err);
       }
     );
-  }, [form]);
+  }, [rcForm]);
 
   return (
     <Form
       data-msform-id={formId}
       data-msform-label={formLabel}
       onFinish={handleSubmit}
-      form={form}
+      form={rcForm}
       component={component}
     >
       {formItems.map((formItem) => (
@@ -78,7 +64,7 @@ const SchemaForm = <FormDataType extends {} = any>({
           formItemSchema={formItem}
           formSchema={schema}
           fieldsStatus={refConstant.current.fieldsStatus}
-          form={form}
+          form={rcForm}
         />
       ))}
 

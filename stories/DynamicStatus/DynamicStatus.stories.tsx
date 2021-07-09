@@ -1,14 +1,12 @@
 import React, { useRef } from 'react';
 import { Meta } from '@storybook/react';
-import SchemaForm, { SchemaFormInstance, FormProps } from '../../src';
+import SchemaForm, { useForm, FormProps } from '../../src';
 import Button from 'antd/es/button';
 import { FormSchema } from '../../src/typings/schema';
 import PhoneOS from './FormItems/PhoneOS';
-import PhoneVersion from './FormItems/PhoneVersion'
+import PhoneVersion from './FormItems/PhoneVersion';
 import FormItemWrapper from '../components/FormItemWrapper';
 import 'antd/dist/antd.css';
-
-// test
 
 const meta: Meta = {
   title: '动态状态',
@@ -28,16 +26,20 @@ const meta: Meta = {
 export default meta;
 
 const Template = (args: FormProps) => {
-  const formRef = useRef<SchemaFormInstance | null>(null)
+  const [form] = useForm()
 
   return (
     <div>
-      <SchemaForm {...args} formRef={formRef} />
+      <SchemaForm {...args} form={form} />
 
-      <Button onClick={() => {
-        const values = formRef.current.getFieldsValue()
-        console.log('values', values)
-      }}>获取表单值</Button>
+      <Button
+        onClick={() => {
+          const values = form.getFieldsValue();
+          console.log('outter get values', values);
+        }}
+      >
+        获取表单值
+      </Button>
     </div>
   );
 };
@@ -51,6 +53,12 @@ const schema: FormSchema = {
   formLabel: '动态状态校验表单',
   formItems: [
     {
+      rules: [
+        {
+          required: true,
+          message: '必填项',
+        },
+      ],
       initialValue: 'ios',
       field: 'phoneos',
       label: '手机操作系统',
@@ -61,8 +69,8 @@ const schema: FormSchema = {
     {
       dependencies: ['phoneos'],
       visible: (value, formData) => {
-        console.log('visible tirgger', formData)
-        return formData.phoneos === 'ios'
+        console.log('visible tirgger', formData);
+        return formData.phoneos === 'ios';
       },
       field: 'osversion',
       label: '版本号输入',
@@ -80,7 +88,7 @@ Default.args = {
   schema,
   formData: {},
   onSubmit: (values) => {
-    console.log('values:', values);
+    console.log('submit values:', values);
   },
   children: (
     <div
