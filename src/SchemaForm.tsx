@@ -30,6 +30,11 @@ const SchemaForm = <FormDataType extends {} = any>({
   }); // 用于搜集各个组件的信息，如visible, disabled，用于后续的处理
 
   useEffect(() => {
+    // 在所有field搜集完成后，强制做一次更新，否则visible、disabled这样的状态处理函数无法获取真实的表单数据
+    form.resetFields();
+  }, []);
+
+  useEffect(() => {
     if (formData) {
       form.setFieldsValue(formData);
     }

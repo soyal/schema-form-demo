@@ -61,7 +61,8 @@ const schema: FormSchema = {
     {
       dependencies: ['phoneos'],
       visible: (value, formData) => {
-        return formData.phoneos !== 'other'
+        console.log('visible tirgger', formData)
+        return formData.phoneos === 'ios'
       },
       field: 'osversion',
       label: '版本号输入',

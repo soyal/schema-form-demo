@@ -83,11 +83,6 @@ const FormItemWrapper = <FormDataType extends { [key: string]: any }>(
     );
   }
 
-  console.log('parentFullPath', parentFullPath);
-  console.log(
-    'deps',
-    dependencies?.map((dep) => parentFullPath.concat(dep))
-  );
   // 开始处理渲染内容
   return (
     <Field
