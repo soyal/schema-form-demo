@@ -1,7 +1,7 @@
 import { FormSchema } from './schema';
 import { Meta }  from 'rc-field-form/es/interface'
 
-export interface FormProps<FormDataType> {
+interface FormProps<FormDataType> {
   schema: FormSchema<FormDataType>;
   formData?: FormDataTypem;
   onSubmit: (formData: FormDataType) => void;
@@ -32,4 +32,10 @@ export type TFieldStatus = {
     visible: boolean;
     disabled: boolean;
   };
+};
+
+export type SchemaFormProps<FormDataType = any> = FormProps<FormDataType> & {
+  children: JSX.Element;
+  schemaForm?: SchemaFormInstance
+  component?: string | false | React.ComponentClass<any, any> | React.FC<any>; // 可以自定义form的外层的标签，默认渲染<form>，可自定义，方便用户将SchemaForm嵌套在其他表单中
 };

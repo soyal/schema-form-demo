@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { Meta } from '@storybook/react';
-import SchemaForm, { useForm, FormProps } from '../../src';
+import SchemaForm, { useSchemaForm, SchemaFormProps } from '../../src';
 import Button from 'antd/es/button';
 import { FormSchema } from '../../src/typings/schema';
 import PhoneOS from './FormItems/PhoneOS';
@@ -25,16 +25,16 @@ const meta: Meta = {
 
 export default meta;
 
-const Template = (args: FormProps) => {
-  const [form] = useForm()
+const Template = (args: SchemaFormProps) => {
+  const [schemaForm] = useSchemaForm()
 
   return (
     <div>
-      <SchemaForm {...args} form={form} />
+      <SchemaForm {...args} schemaForm={schemaForm} />
 
       <Button
         onClick={() => {
-          const values = form.getFieldsValue();
+          const values = schemaForm.getFieldsValue();
           console.log('outter get values', values);
         }}
       >

@@ -21,7 +21,7 @@ function _get(obj: any, key: string) {
   try {
     return obj[key];
   } catch {
-    return null;
+    return;
   }
 }
 
@@ -70,7 +70,9 @@ export function filterInvisibleFields(
     const fieldStatus = fieldsStatus[key];
     if (fieldStatus.visible) {
       const value = getValue(allFieldsValue, key);
-      setValue(result, key, value);
+      if (value !== undefined) {
+        setValue(result, key, value);
+      }
     }
   });
 

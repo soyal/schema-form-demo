@@ -23,8 +23,7 @@ const FormItemInterceptor = ({
   onChange,
   formSchema,
   name,
-  form,
-  fieldsStatus,
+  schemaForm,
   validateMeta,
 }: FormItemInterceptorProps) => {
   const {
@@ -38,9 +37,9 @@ const FormItemInterceptor = ({
     rules = [],
   } = formItemSchema;
   const { Element, props } = component;
-  const { setFieldsValue, resetFields } = form;
+  const { setFieldsValue, resetFields } = schemaForm.rcForm;
   const { dataStore } = formSchema;
-  const formData = getFormData(form, name); // 全局formData或者是nested formData
+  const formData = getFormData(schemaForm.rcForm, name); // 全局formData或者是nested formData
 
   let nameStr: string;
   if (name instanceof Array) {
@@ -49,8 +48,8 @@ const FormItemInterceptor = ({
     nameStr = name;
   }
 
-  if (!fieldsStatus[nameStr]) {
-    fieldsStatus[nameStr] = {
+  if (!schemaForm.fieldsStatus[nameStr]) {
+    schemaForm.fieldsStatus[nameStr] = {
       visible: true,
       disabled: false,
     };
@@ -61,18 +60,18 @@ const FormItemInterceptor = ({
   if (typeof visible === 'boolean') {
     visibleResult = visible;
   } else if (typeof visible === 'function') {
-    visibleResult = visible(form.getFieldValue(field), formData, dataStore);
+    visibleResult = visible(schemaForm.rcForm.getFieldValue(field), formData, dataStore);
   }
-  fieldsStatus[nameStr]['visible'] = visibleResult;
+  schemaForm.fieldsStatus[nameStr]['visible'] = visibleResult;
 
   // is disabled
   let disabledResult = false;
   if (typeof disabled === 'boolean') {
     disabledResult = disabled;
   } else if (typeof disabled === 'function') {
-    disabledResult = disabled(form.getFieldValue(field), formData, dataStore);
+    disabledResult = disabled(schemaForm.rcForm.getFieldValue(field), formData, dataStore);
   }
-  fieldsStatus[nameStr]['disabled'] = disabledResult;
+  schemaForm.fieldsStatus[nameStr]['disabled'] = disabledResult;
 
   // if  invisible, do not render
   if (!visibleResult) return null;
@@ -122,7 +121,7 @@ const FormItemInterceptor = ({
 
         if (hooks.onChange.length > 0) {
           hooks.onChange.forEach((fn) => {
-            const formData = getFormData(form, name);
+            const formData = getFormData(schemaForm.rcForm, name);
 
             fn({ setFieldsValue, resetFields }, nValue, formData, dataStore);
           });

@@ -1,9 +1,10 @@
 import React from 'react';
 import { FormItemSchema, FormSchema } from '@/typings/schema';
-import { FormArrayOfWrapper, TFieldStatus } from '@/typings/form';
+import { FormArrayOfWrapper } from '@/typings/form';
 import FormItemInterceptor from './FormItemInterceptor';
-import Form, { FormInstance } from 'rc-field-form';
+import Form from 'rc-field-form';
 import { ListField } from 'rc-field-form/es/List';
+import { SchemaFormInstance } from '../useSchemaForm';
 
 const { List, Field } = Form;
 export interface FormWrapperProps<FormDataType> {
@@ -11,21 +12,11 @@ export interface FormWrapperProps<FormDataType> {
   formSchema: FormSchema<FormDataType>;
   listField?: ListField;
   listName?: string; // Form.List组件上注册的name
-  form: FormInstance;
-  fieldsStatus: TFieldStatus;
+  schemaForm: SchemaFormInstance;
 }
 
-const FormItemWrapper = <FormDataType extends { [key: string]: any }>(
-  props: FormWrapperProps<FormDataType>
-) => {
-  const {
-    formItemSchema,
-    formSchema,
-    listField,
-    form,
-    listName,
-    fieldsStatus,
-  } = props;
+const FormItemWrapper = (props: FormWrapperProps<any>) => {
+  const { formItemSchema, formSchema, listField, schemaForm, listName } = props;
   const {
     field,
     rules,
@@ -51,7 +42,7 @@ const FormItemWrapper = <FormDataType extends { [key: string]: any }>(
     return (
       <List name={field} initialValue={[]}>
         {(fieldItems, { add, remove }) => {
-          const listValue = form.getFieldValue(field) || [];
+          const listValue = schemaForm.rcForm.getFieldValue(field) || [];
           return (
             <ResultElement
               {...props}
@@ -67,9 +58,8 @@ const FormItemWrapper = <FormDataType extends { [key: string]: any }>(
                         key={childrenItemSchema.field}
                         formItemSchema={childrenItemSchema}
                         formSchema={formSchema}
-                        fieldsStatus={fieldsStatus}
                         listField={fieldItem}
-                        form={form}
+                        schemaForm={schemaForm}
                         listName={field}
                       />
                     ))}
@@ -98,8 +88,7 @@ const FormItemWrapper = <FormDataType extends { [key: string]: any }>(
           {...control}
           validateMeta={meta}
           name={formItemFullName}
-          form={form}
-          fieldsStatus={fieldsStatus}
+          schemaForm={schemaForm}
         />
       )}
     </Field>

@@ -1,4 +1,4 @@
-export { default as default, IProps as FormProps } from './SchemaForm';
-export { useForm } from 'rc-field-form';
+export { default as default } from './SchemaForm';
+export { default as useSchemaForm } from './useSchemaForm';
 export * from './typings/schema.d';
 export * from './typings/form.d';
