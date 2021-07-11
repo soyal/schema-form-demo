@@ -1,6 +1,6 @@
 import { Meta } from '@storybook/react';
 import React from 'react';
-import SchemaForm, { FormSchema } from '../../src';
+import SchemaForm, { FormSchema, useSchemaForm } from '../../src';
 import Button from 'antd/es/button';
 import CustomInput from '../components/CustomInput';
 import CustomRadioGroup from '../components/CustomRadioGroup';
@@ -63,16 +63,20 @@ const Template = () => {
       },
     ],
   };
+  const [schemaForm] = useSchemaForm();
 
   return (
-    <SchemaForm
-      schema={schema}
-      onSubmit={(values) => {
-        console.log('form submit values', values);
-      }}
-    >
+    <SchemaForm schema={schema} schemaForm={schemaForm}>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <Button htmlType="submit">提交表单</Button>
+        <Button
+          onClick={() => {
+            schemaForm.validateFields().then((values) => {
+              console.log('values', values);
+            });
+          }}
+        >
+          提交表单
+        </Button>
       </div>
     </SchemaForm>
   );

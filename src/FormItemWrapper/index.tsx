@@ -14,10 +14,18 @@ export interface FormWrapperProps<FormDataType> {
   listField?: ListField;
   listName?: string; // Form.List组件上注册的name
   schemaForm: SchemaFormInstance;
+  disableValidate: boolean;
 }
 
 const FormItemWrapper = (props: FormWrapperProps<any>) => {
-  const { formItemSchema, formSchema, listField, schemaForm, listName } = props;
+  const {
+    formItemSchema,
+    formSchema,
+    listField,
+    schemaForm,
+    listName,
+    disableValidate,
+  } = props;
   const {
     field,
     rules,
@@ -58,6 +66,7 @@ const FormItemWrapper = (props: FormWrapperProps<any>) => {
                       <FormItemWrapper
                         key={childrenItemSchema.field}
                         formItemSchema={childrenItemSchema}
+                        disableValidate={disableValidate}
                         formSchema={formSchema}
                         listField={fieldItem}
                         schemaForm={schemaForm}
@@ -82,7 +91,7 @@ const FormItemWrapper = (props: FormWrapperProps<any>) => {
       {...listField}
       name={fieldName}
       rules={nRules}
-      validateTrigger={['onChange', 'onBlur']}
+      validateTrigger={disableValidate ? [] : ['onChange', 'onBlur']}
       initialValue={initialValue}
       dependencies={dependencies?.map((dep) => parentFullPath.concat(dep))}
     >

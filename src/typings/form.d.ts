@@ -5,6 +5,7 @@ interface FormProps<FormDataType> {
   schema: FormSchema<FormDataType>;
   formData?: FormDataTypem;
   onSubmit: (formData: FormDataType) => void;
+  disableValidate?: boolean; // 禁用校验
 }
 
 export interface FormItemProps<ValueType = any, FormDataType = any> {

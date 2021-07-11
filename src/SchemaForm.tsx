@@ -10,6 +10,7 @@ const SchemaForm = <FormDataType extends {} = any>({
   children,
   schemaForm: outterSchemaForm,
   component,
+  disableValidate = false,
 }: SchemaFormProps<FormDataType>) => {
   const { formId, formLabel, formItems } = schema;
   const [schemaForm] = useSchemaForm(outterSchemaForm);
@@ -38,6 +39,7 @@ const SchemaForm = <FormDataType extends {} = any>({
           formItemSchema={formItem}
           formSchema={schema}
           schemaForm={schemaForm}
+          disableValidate={disableValidate}
         />
       ))}
 

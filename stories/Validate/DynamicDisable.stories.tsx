@@ -1,5 +1,5 @@
 import { Meta } from '@storybook/react';
-import React from 'react';
+import React, { useState } from 'react';
 import SchemaForm, { FormSchema, useSchemaForm } from '../../src';
 import Button from 'antd/es/button';
 import CustomInput from '../components/CustomInput';
@@ -10,7 +10,7 @@ import 'antd/dist/antd.css';
 // test
 
 const meta: Meta = {
-  title: '校验/自定义校验',
+  title: '校验/决定是否开启校验',
   component: SchemaForm,
   argTypes: {
     children: {
@@ -45,22 +45,16 @@ const Template = () => {
         },
       },
       {
-        label: '版本描述(异步校验-不超过10个字符 onBlur)',
+        label: '版本描述(10字内)',
         field: 'versionDesc',
         rules: [
           {
-            validator: (rule, value, { getFieldValue }) => {
-              return new Promise((resolve, reject) => {
-                setTimeout(() => {
-                  if (value.length <= 10) {
-                    resolve(true);
-                  } else {
-                    reject('版本信息不能超过10个字符');
-                  }
-                }, 2000);
-              });
-            },
-            validateTrigger: 'onBlur',
+            required: true,
+            message: '必须填写版本信息',
+          },
+          {
+            max: 10,
+            message: '版本描述不能超过10个字符',
           },
         ],
         component: {
@@ -71,13 +65,20 @@ const Template = () => {
   };
 
   const [schemaForm] = useSchemaForm();
+  const [hasSubmit, setHasSubmit] = useState(false);
 
   return (
-    <SchemaForm schema={schema} schemaForm={schemaForm}>
+    <SchemaForm schema={schema} schemaForm={schemaForm} disableValidate={!hasSubmit}>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <Button
-          onClick={(values) => {
-            console.log('values', values);
+          onClick={() => {
+            if (!hasSubmit) {
+              setHasSubmit(true);
+            }
+
+            schemaForm.validateFields().then((values) => {
+              console.log('values', values);
+            });
           }}
         >
           提交表单
@@ -89,5 +90,5 @@ const Template = () => {
 
 // By passing using the Args format for exported stories, you can control the props for a component for reuse in a test
 // https://storybook.js.org/docs/react/workflows/unit-testing
-export const CustomValidate = Template.bind({});
+export const Basic = Template.bind({});
 export default meta;
