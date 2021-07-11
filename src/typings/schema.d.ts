@@ -1,6 +1,27 @@
 import React from 'react';
 import { FormItemProps, FormArrayOfWrapper } from './form';
-import { Rule, NamePath } from 'rc-field-form/es/interface';
+import { Rule, NamePath, RuleType } from 'rc-field-form/es/interface';
+
+interface BaseRule {
+  warningOnly?: boolean;
+  enum?: StoreValue[];
+  len?: number;
+  max?: number;
+  message?: string | ReactElement;
+  min?: number;
+  pattern?: RegExp;
+  required?: boolean;
+  transform?: (value: any) => any;
+  type?: RuleType;
+  whitespace?: boolean;
+  /** Customize rule level `validateTrigger`. Must be subset of Field `validateTrigger` */
+  validateTrigger?: string | string[];
+  validator?: (
+    rule: Rule,
+    value: any,
+    operation: { getFieldValue: (fieldName: string) => any }
+  ) => Promise<any>;
+}
 
 export interface FormSchema<FormDataType = any> {
   formId: string; // 打点字段
@@ -39,7 +60,7 @@ export interface FormItemSchema<FormDataType = any> {
   visible?: boolean | StatusFunc;
   disabled?: boolean | StatusFunc;
   // 可直接参考antd3文档
-  rules?: Array<Rule>;
+  rules?: Array<BaseRule>;
   // 影响表单值的操作
   updateFormValue?: [
     {

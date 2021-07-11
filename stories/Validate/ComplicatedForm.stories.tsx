@@ -10,7 +10,7 @@ import 'antd/dist/antd.css';
 // test
 
 const meta: Meta = {
-  title: '校验/自定义校验',
+  title: '校验/复杂表单场景',
   component: SchemaForm,
   argTypes: {
     children: {
@@ -26,41 +26,58 @@ const meta: Meta = {
 
 const Template = () => {
   const schema: FormSchema = {
-    formId: 'phoneos',
-    formLabel: '手机系统记录',
+    formId: 'personInfoForm',
+    formLabel: '个人信息登记',
     formItems: [
       {
-        label: '操作系统',
-        field: 'phoneos',
-        initialValue: 'other',
+        label: '姓名',
+        field: 'name',
+        initialValue: '',
+        component: {
+          Element: FormItemWrapper(CustomInput),
+          props: {
+            placeholder: '请输入姓名',
+          },
+        },
+        rules: [
+          {
+            required: true,
+            message: '必须填写姓名',
+          },
+        ],
+      },
+      {
+        label: '国家',
+        field: 'country',
+        initialValue: 'china',
         component: {
           Element: FormItemWrapper(CustomRadioGroup),
           props: {
             options: [
-              { label: 'ios', value: 'ios' },
-              { label: '安卓', value: 'android' },
+              { label: '中国', value: 'china' },
+              { label: '美国', value: 'us' },
               { label: '其他', value: 'other' },
             ],
           },
         },
       },
       {
-        label: '版本描述(异步校验-不超过10个字符)',
-        field: 'versionDesc',
+        label: '手机号码',
+        field: 'phoneNum',
         rules: [
           {
-            validator: (rule, value, { getFieldValue }) => {
-              return new Promise((resolve, reject) => {
-                setTimeout(() => {
-                  if (value.length <= 10) {
-                    resolve(true);
-                  } else {
-                    reject('版本信息不能超过10个字符');
-                  }
-                }, 2000);
-              });
-            },
+            required: true,
+            message: '必须填写手机号信息',
           },
+          {
+            max: 10,
+            message: '版本描述不能超过10个字符',
+          },
+          {
+            validator: (rule, value, { getFieldValue }) => {
+              return Promise.resolve()
+            }
+          }
         ],
         component: {
           Element: FormItemWrapper(CustomInput),
@@ -85,5 +102,5 @@ const Template = () => {
 
 // By passing using the Args format for exported stories, you can control the props for a component for reuse in a test
 // https://storybook.js.org/docs/react/workflows/unit-testing
-export const CustomValidate = Template.bind({});
+export const Basic = Template.bind({});
 export default meta;

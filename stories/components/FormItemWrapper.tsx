@@ -4,7 +4,7 @@ import { FormItemProps } from '../../src/typings/form';
 export default function FormItemWrapper(WrappedComponent) {
   const FormItem: React.FC<FormItemProps> = (props) => {
     const { required, label, validateMeta } = props;
-    console.log('validateMeta', validateMeta);
+
     return (
       <div
         style={{

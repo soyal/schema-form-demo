@@ -5,6 +5,7 @@ import FormItemInterceptor from './FormItemInterceptor';
 import Form from 'rc-field-form';
 import { ListField } from 'rc-field-form/es/List';
 import { SchemaFormInstance } from '../useSchemaForm';
+import ruleWrapper from './ruleWrapper';
 
 const { List, Field } = Form;
 export interface FormWrapperProps<FormDataType> {
@@ -73,12 +74,14 @@ const FormItemWrapper = (props: FormWrapperProps<any>) => {
     );
   }
 
+  const nRules = rules?.map((rule) => ruleWrapper(rule, schemaForm));
+
   // 开始处理渲染内容
   return (
     <Field
       {...listField}
       name={fieldName}
-      rules={rules}
+      rules={nRules}
       initialValue={initialValue}
       dependencies={dependencies?.map((dep) => parentFullPath.concat(dep))}
     >
