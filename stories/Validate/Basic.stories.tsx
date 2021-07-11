@@ -1,5 +1,5 @@
-import React from 'react';
 import { Meta } from '@storybook/react';
+import React from 'react';
 import SchemaForm, { FormSchema } from '../../src';
 import Button from 'antd/es/button';
 import CustomInput from '../components/CustomInput';
@@ -10,7 +10,7 @@ import 'antd/dist/antd.css';
 // test
 
 const meta: Meta = {
-  title: '基础用法/简单例子',
+  title: '校验/基础用例',
   component: SchemaForm,
   argTypes: {
     children: {
@@ -23,8 +23,6 @@ const meta: Meta = {
     controls: { expanded: true },
   },
 };
-
-export default meta;
 
 const Template = () => {
   const schema: FormSchema = {
@@ -47,8 +45,18 @@ const Template = () => {
         },
       },
       {
-        label: '版本描述',
+        label: '版本描述(10字内)',
         field: 'versionDesc',
+        rules: [
+          {
+            required: true,
+            message: '必须填写版本信息',
+          },
+          {
+            max: 10,
+            message: '版本描述不能超过10个字符',
+          },
+        ],
         component: {
           Element: FormItemWrapper(CustomInput),
         },
@@ -72,4 +80,5 @@ const Template = () => {
 
 // By passing using the Args format for exported stories, you can control the props for a component for reuse in a test
 // https://storybook.js.org/docs/react/workflows/unit-testing
-export const Default = Template.bind({});
+export const Basic = Template.bind({});
+export default meta;

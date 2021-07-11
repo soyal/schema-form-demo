@@ -9,7 +9,7 @@ import 'antd/dist/antd.css';
 
 // test
 const meta: Meta = {
-  title: '2.基础联动',
+  title: '联动/基础状态联动',
   component: SchemaForm,
   argTypes: {
     children: {

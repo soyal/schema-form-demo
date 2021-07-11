@@ -4,7 +4,7 @@ import { FormItemProps } from '../../src/typings/form';
 export default function FormItemWrapper(WrappedComponent) {
   const FormItem: React.FC<FormItemProps> = (props) => {
     const { required, label, validateMeta } = props;
-
+    console.log('validateMeta', validateMeta);
     return (
       <div
         style={{
@@ -39,8 +39,25 @@ export default function FormItemWrapper(WrappedComponent) {
         >
           <WrappedComponent {...props} />
 
+          {validateMeta.validating ? (
+            <p
+              style={{
+                color: 'orange',
+              }}
+            >
+              校验中...
+            </p>
+          ) : null}
+
           {validateMeta.errors.map((errStr, index) => (
-            <div key={index}>{errStr}</div>
+            <div
+              key={index}
+              style={{
+                color: 'red',
+              }}
+            >
+              {errStr}
+            </div>
           ))}
         </div>
       </div>
