@@ -18,3 +18,15 @@ export function getFormData(
 
   return formData;
 }
+
+/**
+ * 将可能为原生事件的值转为原始类型
+ * @param value NativeEvent | string | number | object
+ */
+export function getValue(value: any) {
+  if (value.nativeEvent && value.target) {
+    return value.target.value;
+  } else {
+    return value;
+  }
+}

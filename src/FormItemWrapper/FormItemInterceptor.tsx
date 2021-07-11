@@ -5,7 +5,7 @@
 import React from 'react';
 import { FormWrapperProps } from './index';
 import { FormItemProps } from '@/typings/form';
-import { getFormData } from './util';
+import { getFormData, getValue } from './util';
 // import { log } from '../invariant';
 import { Meta } from 'rc-field-form/es/interface';
 
@@ -134,7 +134,7 @@ const FormItemInterceptor = ({
           hooks.onChange.forEach((fn) => {
             const formData = getFormData(schemaForm.rcForm, name);
 
-            fn({ setFieldsValue, resetFields }, nValue, formData, dataStore);
+            fn({ setFieldsValue, resetFields }, getValue(nValue), formData, dataStore);
           });
         }
       }}
