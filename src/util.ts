@@ -78,3 +78,38 @@ export function filterInvisibleFields(
 
   return result;
 }
+
+/**
+ * 通过fieldsValue获取所有的field路径
+ * @param fieldsValue
+ * e.g { a:1, b: [ {x: 1, y: 1} ] } => [['a'], ['b', '0', 'x'], ['b', '0', 'y']]
+ */
+export function getFields(fieldsValue: any) {
+  const result: Array<string[]> = [];
+
+  function backtrace(
+    context: { [key: string]: any } | Array<any> | string | number,
+    temp: string[]
+  ) {
+    if (context instanceof Array) {
+      context.forEach((value: any, index: number) => {
+        temp.push(index.toString());
+        backtrace(value, temp);
+        temp.pop();
+      });
+    } else if (typeof context === 'object') {
+      Object.keys(context).forEach((key: string) => {
+        const value = context[key];
+        temp.push(key);
+        backtrace(value, temp);
+        temp.pop();
+      });
+    } else {
+      result.push(temp.slice());
+    }
+  }
+
+  backtrace(fieldsValue, []);
+
+  return result;
+}

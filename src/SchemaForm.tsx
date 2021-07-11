@@ -7,7 +7,6 @@ import useSchemaForm from './useSchemaForm';
 const SchemaForm = <FormDataType extends {} = any>({
   schema,
   formData, // 用于初始化
-  onSubmit,
   children,
   schemaForm: outterSchemaForm,
   component,
@@ -26,23 +25,10 @@ const SchemaForm = <FormDataType extends {} = any>({
     }
   }, [formData]);
 
-  const handleSubmit = useCallback(() => {
-    schemaForm.rcForm
-      .validateFields()
-      .then(() => {
-        console.log("【schema form】submit success")
-        onSubmit(schemaForm.getFieldsValue());
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, [schemaForm]);
-
   return (
     <Form
       data-msform-id={formId}
       data-msform-label={formLabel}
-      onFinish={handleSubmit}
       form={schemaForm.rcForm}
       component={component}
     >

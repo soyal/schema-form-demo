@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { useForm } from 'rc-field-form';
 import { FormInstance } from 'rc-field-form';
 import { TFieldStatus } from '@/typings/form';
-import { filterInvisibleFields } from './util';
+import { filterInvisibleFields, getFields } from './util';
 
 export class SchemaFormInstance {
   rcForm: FormInstance;
@@ -23,8 +23,25 @@ export class SchemaFormInstance {
     return filteredValues;
   }
 
+  /**
+   * 提取visible的所有字段
+   */
+  getVisibleFields(): Array<string[]> {
+    const rcFieldsValue = this.rcForm.getFieldsValue();
+    const originFields = getFields(rcFieldsValue);
+
+    const visibledFields = originFields.filter((originField) => {
+      const key = originField.join('.');
+      return this.fieldsStatus[key].visible;
+    });
+
+    return visibledFields;
+  }
+
   validateFields() {
-    this.rcForm.validateFields();
+    const visibleFields = this.getVisibleFields();
+
+    return this.rcForm.validateFields(visibleFields);
   }
 }
 

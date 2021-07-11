@@ -82,6 +82,7 @@ const FormItemWrapper = (props: FormWrapperProps<any>) => {
       {...listField}
       name={fieldName}
       rules={nRules}
+      validateTrigger={['onChange', 'onBlur']}
       initialValue={initialValue}
       dependencies={dependencies?.map((dep) => parentFullPath.concat(dep))}
     >
