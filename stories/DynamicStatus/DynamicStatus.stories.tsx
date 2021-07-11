@@ -11,7 +11,7 @@ import 'antd/dist/antd.css';
 import Form from 'rc-field-form/es/Form';
 
 const meta: Meta = {
-  title: '动态状态',
+  title: '3.动态状态',
   component: SchemaForm,
   argTypes: {
     children: {

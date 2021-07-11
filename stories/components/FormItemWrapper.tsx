@@ -15,6 +15,7 @@ export default function FormItemWrapper(WrappedComponent) {
         <div
           style={{
             minWidth: 200,
+            textAlign: 'right',
           }}
         >
           {required ? (
