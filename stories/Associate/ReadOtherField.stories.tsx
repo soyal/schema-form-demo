@@ -2,7 +2,6 @@ import React from 'react';
 import { Meta } from '@storybook/react';
 import SchemaForm, { FormSchema, useSchemaForm } from '../../src';
 import Button from 'antd/es/button';
-import CustomInput from '../components/CustomInput';
 import IndustryDesc from './components/IndustryDes';
 import CustomRadioGroup from '../components/CustomRadioGroup';
 import FormItemWrapper from '../components/FormItemWrapper';
@@ -10,7 +9,7 @@ import 'antd/dist/antd.css';
 
 // test
 const meta: Meta = {
-  title: '联动/读取其他表单相的值',
+  title: '联动/读取其他表单项的值',
   component: SchemaForm,
   argTypes: {
     children: {
