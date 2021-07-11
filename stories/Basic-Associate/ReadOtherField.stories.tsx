@@ -3,14 +3,14 @@ import { Meta } from '@storybook/react';
 import SchemaForm, { FormSchema, useSchemaForm } from '../../src';
 import Button from 'antd/es/button';
 import CustomInput from '../components/CustomInput';
+import IndustryDesc from './components/IndustryDes';
 import CustomRadioGroup from '../components/CustomRadioGroup';
 import FormItemWrapper from '../components/FormItemWrapper';
 import 'antd/dist/antd.css';
 
 // test
-
 const meta: Meta = {
-  title: '基础用法/简单例子',
+  title: '联动/读取其他表单相的值',
   component: SchemaForm,
   argTypes: {
     children: {
@@ -28,29 +28,35 @@ export default meta;
 
 const Template = () => {
   const schema: FormSchema = {
-    formId: 'phoneos',
-    formLabel: '手机系统记录',
+    formId: 'industryInfoForm',
+    formLabel: '行业信息表单',
     formItems: [
       {
-        label: '操作系统',
-        field: 'phoneos',
+        label: '行业',
+        field: 'industry',
         initialValue: 'other',
         component: {
           Element: FormItemWrapper(CustomRadioGroup),
           props: {
             options: [
-              { label: 'ios', value: 'ios' },
-              { label: '安卓', value: 'android' },
-              { label: '其他', value: 'other' },
+              { label: '电子元器件', value: 'ic' },
+              { label: '机械', value: 'machine' },
+              { label: '汽配', value: 'car' },
+              { label: '其他行业', value: 'other' },
             ],
           },
         },
       },
       {
-        label: '版本描述',
-        field: 'versionDesc',
+        dependencies: ['industry'],
+        label: '行业描述',
+        field: 'desc',
+        initialValue: '',
         component: {
-          Element: FormItemWrapper(CustomInput),
+          Element: FormItemWrapper(IndustryDesc),
+          props: {
+            placeholder: '行业描述',
+          },
         },
       },
     ],
@@ -62,7 +68,6 @@ const Template = () => {
     <SchemaForm schema={schema} schemaForm={schemaForm}>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <Button
-          htmlType="submit"
           onClick={() => {
             schemaForm.validateFields().then((values) => {
               console.log('values', values);
