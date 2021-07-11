@@ -45,7 +45,7 @@ const Template = () => {
         },
       },
       {
-        label: '版本描述(异步校验-不超过10个字符)',
+        label: '版本描述(异步校验-不超过10个字符 onBlur)',
         field: 'versionDesc',
         rules: [
           {
@@ -60,6 +60,7 @@ const Template = () => {
                 }, 2000);
               });
             },
+            validateTrigger: "onBlur"
           },
         ],
         component: {

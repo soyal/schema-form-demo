@@ -86,15 +86,17 @@ const FormItemWrapper = (props: FormWrapperProps<any>) => {
       initialValue={initialValue}
       dependencies={dependencies?.map((dep) => parentFullPath.concat(dep))}
     >
-      {(control, meta) => (
-        <FormItemInterceptor
-          {...props}
-          {...control}
-          validateMeta={meta}
-          name={formItemFullName}
-          schemaForm={schemaForm}
-        />
-      )}
+      {(control, meta) => {
+        return (
+          <FormItemInterceptor
+            {...props}
+            {...control}
+            validateMeta={meta}
+            name={formItemFullName}
+            schemaForm={schemaForm}
+          />
+        );
+      }}
     </Field>
   );
 };

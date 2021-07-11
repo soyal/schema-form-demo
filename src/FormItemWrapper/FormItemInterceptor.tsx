@@ -15,6 +15,8 @@ interface FormItemInterceptorProps extends FormWrapperProps<any> {
   disabled?: boolean;
   name: string | (string | number)[];
   validateMeta: Meta;
+  onBlur?: () => void;
+  onFocus?: () => void;
 }
 
 const FormItemInterceptor = ({
@@ -25,6 +27,7 @@ const FormItemInterceptor = ({
   name,
   schemaForm,
   validateMeta,
+  ...others
 }: FormItemInterceptorProps) => {
   const {
     component,
@@ -60,7 +63,11 @@ const FormItemInterceptor = ({
   if (typeof visible === 'boolean') {
     visibleResult = visible;
   } else if (typeof visible === 'function') {
-    visibleResult = visible(schemaForm.rcForm.getFieldValue(field), formData, dataStore);
+    visibleResult = visible(
+      schemaForm.rcForm.getFieldValue(field),
+      formData,
+      dataStore
+    );
   }
   schemaForm.fieldsStatus[nameStr]['visible'] = visibleResult;
 
@@ -69,7 +76,11 @@ const FormItemInterceptor = ({
   if (typeof disabled === 'boolean') {
     disabledResult = disabled;
   } else if (typeof disabled === 'function') {
-    disabledResult = disabled(schemaForm.rcForm.getFieldValue(field), formData, dataStore);
+    disabledResult = disabled(
+      schemaForm.rcForm.getFieldValue(field),
+      formData,
+      dataStore
+    );
   }
   schemaForm.fieldsStatus[nameStr]['disabled'] = disabledResult;
 
@@ -128,6 +139,7 @@ const FormItemInterceptor = ({
         }
       }}
       {...props}
+      {...others}
     ></ResultElement>
   );
 };

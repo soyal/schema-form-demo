@@ -1,5 +1,5 @@
 import { FormSchema } from './schema';
-import { Meta }  from 'rc-field-form/es/interface'
+import { Meta } from 'rc-field-form/es/interface';
 
 interface FormProps<FormDataType> {
   schema: FormSchema<FormDataType>;
@@ -16,6 +16,8 @@ export interface FormItemProps<ValueType = any, FormDataType = any> {
   label: string;
   field: string;
   disabled: boolean; // required to implement
+  onBlur?: () => void;
+  onFocus?: () => void;
   // onBlur?: (value: ValueType) => void;
   // onFocus?: (value: ValueType) => void;
 }
@@ -36,6 +38,6 @@ export type TFieldStatus = {
 
 export type SchemaFormProps<FormDataType = any> = FormProps<FormDataType> & {
   children: JSX.Element;
-  schemaForm?: SchemaFormInstance
+  schemaForm?: SchemaFormInstance;
   component?: string | false | React.ComponentClass<any, any> | React.FC<any>; // 可以自定义form的外层的标签，默认渲染<form>，可自定义，方便用户将SchemaForm嵌套在其他表单中
 };
