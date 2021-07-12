@@ -34,6 +34,7 @@ const Template = () => {
       {
         label: '操作系统',
         field: 'phoneos',
+        dependencies: ['versionDesc'],
         initialValue: 'other',
         component: {
           Element: FormItemWrapper(CustomRadioGroup),
@@ -48,6 +49,7 @@ const Template = () => {
       },
       {
         label: '版本描述',
+        dependencies: ['phoneos'],
         field: 'versionDesc',
         component: {
           Element: FormItemWrapper(CustomInput),
@@ -59,20 +61,23 @@ const Template = () => {
   const [schemaForm] = useSchemaForm();
 
   return (
-    <SchemaForm schema={schema} schemaForm={schemaForm}>
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <Button
-          htmlType="submit"
-          onClick={() => {
-            schemaForm.validateFields().then((values) => {
-              console.log('values', values);
-            });
-          }}
-        >
-          提交表单
-        </Button>
-      </div>
-    </SchemaForm>
+    <div>
+      <h2>循环依赖报警</h2>
+      <SchemaForm schema={schema} schemaForm={schemaForm}>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <Button
+            htmlType="submit"
+            onClick={() => {
+              schemaForm.validateFields().then((values) => {
+                console.log('values', values);
+              });
+            }}
+          >
+            提交表单
+          </Button>
+        </div>
+      </SchemaForm>
+    </div>
   );
 };
 

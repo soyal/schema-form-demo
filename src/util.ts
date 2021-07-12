@@ -1,4 +1,5 @@
 import { TFieldStatus } from '@/typings/form';
+import { FormItemSchema } from '@/typings/schema';
 
 /**
  *
@@ -112,4 +113,50 @@ export function getFields(fieldsValue: any) {
   backtrace(fieldsValue, []);
 
   return result;
+}
+
+/**
+ * 检测是否有环形依赖
+ * 如果没有环，return null，否则返回有环的路径
+ */
+export function hasDependencyCircle(
+  formItemSchemas: FormItemSchema[]
+): null | string[] {
+  let resultPath: null | string[] = null;
+
+  const depMap = formItemSchemas.reduce(
+    (allMap: { [key: string]: string[] }, schemaItem) => {
+      const { field, dependencies = [] } = schemaItem;
+      allMap[field] = dependencies;
+      return allMap;
+    },
+    {}
+  );
+
+  function dfs(
+    fieldName: string,
+    visited: { [key: string]: boolean },
+    path: string[]
+  ) {
+    const deps = depMap[fieldName] || [];
+
+    path.push(fieldName);
+    if (visited[fieldName]) {
+      resultPath = path;
+      return;
+    } else {
+      visited[fieldName] = true;
+      for (let i = 0; i < deps.length; i++) {
+        dfs(deps[i], visited, path);
+      }
+    }
+  }
+
+  for (let i = 0; i < formItemSchemas.length; i++) {
+    const schemaItem = formItemSchemas[i];
+    dfs(schemaItem.field, {}, []);
+    if (resultPath) break;
+  }
+
+  return resultPath;
 }
