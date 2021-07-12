@@ -2,6 +2,8 @@ import React from 'react';
 import { FormItemProps, FormArrayOfWrapper } from './form';
 import { Rule, NamePath, RuleType } from 'rc-field-form/es/interface';
 
+type TValidateTrigger = 'onChange' | 'onBlur';
+
 interface BaseRule {
   warningOnly?: boolean;
   enum?: StoreValue[];
@@ -15,7 +17,7 @@ interface BaseRule {
   type?: RuleType;
   whitespace?: boolean;
   /** Customize rule level `validateTrigger`. Must be subset of Field `validateTrigger` */
-  validateTrigger?: string | string[];
+  validateTrigger?: TValidateTrigger | TValidateTrigger[];
   validator?: (
     rule: Rule,
     value: any,

@@ -8,12 +8,17 @@ export default function ruleWrapper(rule: BaseRule, form: SchemaFormInstance) {
   };
 
   if (typeof nRule.validator === 'function') {
-    const oldFunc = nRule.validator
+    const oldFunc = nRule.validator;
     nRule.validator = (_, value: any) => {
       return oldFunc(_, value, {
         getFieldValue: form.rcForm.getFieldValue,
       });
     };
+  }
+
+  // 默认是onChange
+  if (nRule.validateTrigger === undefined) {
+    nRule.validateTrigger = 'onChange';
   }
 
   return nRule as RuleObject;
