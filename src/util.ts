@@ -1,5 +1,5 @@
-import { TFieldStatus } from '@/typings/form';
-import { FormItemSchema } from '@/typings/schema';
+import { TFieldStatus } from './typings/form';
+import { FormItemSchema } from './typings/schema';
 
 /**
  *

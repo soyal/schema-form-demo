@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { SchemaFormProps } from '@/typings/form';
+import { SchemaFormProps } from './typings/form';
 import FormItemWrapper from './FormItemWrapper';
 import Form from 'rc-field-form';
 import useSchemaForm from './useSchemaForm';

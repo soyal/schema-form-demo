@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { useForm } from 'rc-field-form';
 import { FormInstance } from 'rc-field-form';
-import { TFieldStatus } from '@/typings/form';
+import { TFieldStatus } from './typings/form';
 import { filterInvisibleFields, getFields } from './util';
 
 export class SchemaFormInstance {

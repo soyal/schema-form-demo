@@ -1,6 +1,6 @@
 import React from 'react';
-import { FormItemSchema, FormSchema } from '@/typings/schema';
-import { FormArrayOfWrapper } from '@/typings/form';
+import { FormItemSchema, FormSchema } from '../typings/schema';
+import { FormArrayOfWrapper } from '../typings/form';
 import FormItemInterceptor from './FormItemInterceptor';
 import Form from 'rc-field-form';
 import { ListField } from 'rc-field-form/es/List';

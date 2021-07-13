@@ -1,6 +1,6 @@
 import { RuleObject } from 'rc-field-form/es/interface';
-import { BaseRule, FormSchema } from '@/typings/schema';
-import { SchemaFormInstance } from '@/useSchemaForm';
+import { BaseRule, FormSchema } from '../typings/schema';
+import { SchemaFormInstance } from '../useSchemaForm';
 
 export default function ruleWrapper(
   rule: BaseRule,

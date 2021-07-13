@@ -4,7 +4,7 @@
  */
 import React from 'react';
 import { FormWrapperProps } from './index';
-import { FormItemProps } from '@/typings/form';
+import { FormItemProps } from '../typings/form';
 import { getFormData, getValue } from './util';
 // import { log } from '../invariant';
 import { Meta } from 'rc-field-form/es/interface';
