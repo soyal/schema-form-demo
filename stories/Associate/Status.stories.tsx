@@ -102,7 +102,8 @@ const Template = () => {
         <Button
           onClick={() => {
             schemaForm.validateFields().then((values) => {
-              console.log('values', values);
+              console.log('visible values', values);
+              console.log("all values", schemaForm.getFieldsValue())
             });
           }}
         >

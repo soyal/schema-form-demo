@@ -14,6 +14,10 @@ export class SchemaFormInstance {
   }
 
   getFieldsValue() {
+    return this.rcForm.getFieldsValue();
+  }
+
+  getVisibleFieldsValue() {
     const originValues = this.rcForm.getFieldsValue();
     const filteredValues = filterInvisibleFields(
       originValues,
