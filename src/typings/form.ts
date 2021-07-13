@@ -1,9 +1,10 @@
 import { FormSchema } from './schema';
 import { Meta } from 'rc-field-form/es/interface';
+import { SchemaFormInstance } from '../useSchemaForm';
 
 interface FormProps<FormDataType> {
   schema: FormSchema<FormDataType>;
-  formData?: FormDataTypem;
+  formData?: FormDataType;
   disableValidate?: boolean; // 禁用校验
   disabled?: boolean; // 禁用所有表单项
 }

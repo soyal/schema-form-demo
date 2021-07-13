@@ -1,15 +1,15 @@
 import React from 'react';
 import { FormItemProps, FormArrayOfWrapper } from './form';
-import { Rule, NamePath, RuleType } from 'rc-field-form/es/interface';
+import { Rule, NamePath, RuleType, StoreValue } from 'rc-field-form/es/interface';
 
 type TValidateTrigger = 'onChange' | 'onBlur';
 
-interface BaseRule {
+export interface BaseRule {
   warningOnly?: boolean;
   enum?: StoreValue[];
   len?: number;
   max?: number;
-  message?: string | ReactElement;
+  message?: string | JSX.Element;
   min?: number;
   pattern?: RegExp;
   required?: boolean;
@@ -39,7 +39,7 @@ type DataStore = any[];
 
 type StatusFunc = (
   value: any,
-  formData: FormDataType,
+  formData: any,
   dataStore?: DataStore
 ) => boolean;
 
