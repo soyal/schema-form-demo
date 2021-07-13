@@ -83,7 +83,7 @@ const FormItemWrapper = (props: FormWrapperProps<any>) => {
     );
   }
 
-  const nRules = rules?.map((rule) => ruleWrapper(rule, schemaForm));
+  const nRules = rules?.map((rule) => ruleWrapper(rule, schemaForm, formSchema));
 
   // 开始处理渲染内容
   return (

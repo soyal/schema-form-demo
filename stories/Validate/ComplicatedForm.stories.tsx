@@ -75,22 +75,22 @@ const Template = () => {
           },
           {
             validator: (rule, value, { getFieldValue }) => {
-              const countryValue = getFieldValue('country')
-              let patternNum: string
-              if(countryValue === 'china') {
-                patternNum = '86-'
+              const countryValue = getFieldValue('country');
+              let patternNum: string;
+              if (countryValue === 'china') {
+                patternNum = '86-';
               } else {
-                patternNum = '1-'
+                patternNum = '1-';
               }
 
-              const regExp = new RegExp(`^${patternNum}`)
-              if(regExp.test(value)) {
-                return Promise.resolve()
+              const regExp = new RegExp(`^${patternNum}`);
+              if (regExp.test(value)) {
+                return;
               } else {
                 return Promise.reject('跟国家所对应的格式错误');
               }
             },
-            validateTrigger: ['onBlur']
+            validateTrigger: ['onBlur'],
           },
         ],
         component: {
@@ -143,21 +143,25 @@ const Template = () => {
     ],
   };
 
-  const [schemaForm] = useSchemaForm()
+  const [schemaForm] = useSchemaForm();
 
   return (
-    <SchemaForm
-      schema={schema}
-      schemaForm={schemaForm}
-    >
+    <SchemaForm schema={schema} schemaForm={schemaForm}>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <Button onClick={() => {
-          schemaForm.validateFields().then(values => {
-            console.log('values', values)
-          }, errors => {
-            console.log('校验失败', errors)
-          })
-        }}>提交表单</Button>
+        <Button
+          onClick={() => {
+            schemaForm.validateFields().then(
+              (values) => {
+                console.log('values', values);
+              },
+              (errors) => {
+                console.log('校验失败', errors);
+              }
+            );
+          }}
+        >
+          提交表单
+        </Button>
       </div>
     </SchemaForm>
   );

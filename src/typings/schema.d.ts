@@ -21,8 +21,9 @@ interface BaseRule {
   validator?: (
     rule: Rule,
     value: any,
-    operation: { getFieldValue: (fieldName: string) => any }
-  ) => Promise<any>;
+    operation: { getFieldValue: (fieldName: string) => any },
+    dataStore?: DataStore
+  ) => Promise<any> | void | any;
 }
 
 export interface FormSchema<FormDataType = any> {
