@@ -77,6 +77,7 @@ return (
 
 
 ## 更多demo
+查看：https://st.music.163.com/musician-schema-form?path=/story/%E5%9F%BA%E7%A1%80%E7%94%A8%E6%B3%95-%E7%AE%80%E5%8D%95%E4%BE%8B%E5%AD%90--default
 
 ### step1
 ```
