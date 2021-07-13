@@ -4,7 +4,6 @@ import { Meta } from 'rc-field-form/es/interface';
 interface FormProps<FormDataType> {
   schema: FormSchema<FormDataType>;
   formData?: FormDataTypem;
-  onSubmit: (formData: FormDataType) => void;
   disableValidate?: boolean; // 禁用校验
   disabled?: boolean; // 禁用所有表单项
 }

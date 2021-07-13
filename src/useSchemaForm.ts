@@ -30,7 +30,7 @@ export class SchemaFormInstance {
   /**
    * 提取visible的所有字段
    */
-  getVisibleFields(): Array<string[]> {
+  private getVisibleFields(): Array<string[]> {
     const rcFieldsValue = this.rcForm.getFieldsValue();
     const originFields = getFields(rcFieldsValue);
 

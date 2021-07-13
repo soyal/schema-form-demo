@@ -35,7 +35,7 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "schema-form-demo2",
+  "name": "@music/musician-schema-form",
   "author": "Soyal",
   "module": "dist/schema-form-demo2.esm.js",
   "size-limit": [
