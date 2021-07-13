@@ -127,14 +127,20 @@ const FormItemInterceptor = ({
       validateMeta={validateMeta}
       formData={formData}
       // onChange联动
-      onChange={(nValue: any) => {
+      onChange={(nValue: any, runTimeParams?: any) => {
         onChange && onChange(nValue);
 
         if (hooks.onChange.length > 0) {
           hooks.onChange.forEach((fn) => {
             const formData = getFormData(schemaForm.rcForm, name);
 
-            fn({ setFieldsValue, resetFields }, getValue(nValue), formData, dataStore);
+            fn(
+              { setFieldsValue, resetFields },
+              getValue(nValue),
+              formData,
+              dataStore,
+              runTimeParams
+            );
           });
         }
       }}

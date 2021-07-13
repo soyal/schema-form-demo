@@ -74,7 +74,8 @@ export interface FormItemSchema<FormDataType = any> {
         },
         currValue: any,
         formData: FormDataType,
-        dataStore?: DataStore
+        dataStore: DataStore | undefined,
+        runTimeParams?: any
       ) => void;
     }
   ];

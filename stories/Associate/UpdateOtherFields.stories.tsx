@@ -5,6 +5,7 @@ import Button from 'antd/es/button';
 import CustomInput from '../components/CustomInput';
 import CustomRadioGroup from '../components/CustomRadioGroup';
 import FormItemWrapper from '../components/FormItemWrapper';
+import CarType from './components/CarType';
 import 'antd/dist/antd.css';
 
 // test
@@ -98,3 +99,65 @@ const Template = () => {
 // By passing using the Args format for exported stories, you can control the props for a component for reuse in a test
 // https://storybook.js.org/docs/react/workflows/unit-testing
 export const Default = Template.bind({});
+
+const Template2 = () => {
+  const schema: FormSchema = {
+    formId: 'industryInfoForm',
+    formLabel: '行业信息表单',
+    formItems: [
+      {
+        label: '行业',
+        field: 'industry',
+        initialValue: 'ic',
+        component: {
+          Element: FormItemWrapper(CarType),
+        },
+        updateFormValue: [
+          {
+            timing: 'onChange',
+            updator: ({ setFieldsValue }, currValue, _, __, brand) => {
+              setFieldsValue({
+                desc: `${brand.name}其他行业的默认描述`,
+              });
+            },
+          },
+        ],
+      },
+      {
+        label: '通用描述',
+        field: 'desc',
+        dependencies: ['industry'],
+        disabled: (value, formData) => {
+          return formData['industry'] === 'other';
+        },
+        initialValue: '',
+        component: {
+          Element: FormItemWrapper(CustomInput),
+          props: {
+            placeholder: '通用描述',
+          },
+        },
+      },
+    ],
+  };
+
+  const [schemaForm] = useSchemaForm();
+
+  return (
+    <SchemaForm schema={schema} schemaForm={schemaForm}>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <Button
+          onClick={() => {
+            schemaForm.validateFields().then((values) => {
+              console.log('values', values);
+            });
+          }}
+        >
+          提交表单
+        </Button>
+      </div>
+    </SchemaForm>
+  );
+};
+
+export const PassParams = Template2.bind({});
