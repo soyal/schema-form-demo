@@ -6,6 +6,7 @@ interface FormProps<FormDataType> {
   formData?: FormDataTypem;
   onSubmit: (formData: FormDataType) => void;
   disableValidate?: boolean; // 禁用校验
+  disabled?: boolean; // 禁用所有表单项
 }
 
 export interface FormItemProps<ValueType = any, FormDataType = any> {

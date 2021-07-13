@@ -13,6 +13,7 @@ const SchemaForm = <FormDataType extends {} = any>({
   schemaForm: outterSchemaForm,
   component,
   disableValidate = false,
+  disabled = false,
 }: SchemaFormProps<FormDataType>) => {
   const { formId, formLabel, formItems } = schema;
   const [schemaForm] = useSchemaForm(outterSchemaForm);
@@ -38,6 +39,15 @@ const SchemaForm = <FormDataType extends {} = any>({
     }
   }, [formData]);
 
+  // 强制disable处理
+  let resultFormItems = formItems;
+  if (disabled) {
+    resultFormItems = resultFormItems.map((item) => ({
+      ...item,
+      disabled: true,
+    }));
+  }
+
   return (
     <Form
       data-msform-id={formId}
@@ -45,7 +55,7 @@ const SchemaForm = <FormDataType extends {} = any>({
       form={schemaForm.rcForm}
       component={component}
     >
-      {formItems.map((formItem) => (
+      {resultFormItems.map((formItem) => (
         <FormItemWrapper
           key={formItem.field}
           formItemSchema={formItem}
