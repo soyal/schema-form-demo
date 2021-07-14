@@ -1,5 +1,6 @@
 import React from 'react';
 import { FormItemProps, FormArrayOfWrapper } from './form';
+import { SchemaFormInstance } from '../useSchemaForm'
 import { Rule, NamePath, RuleType, StoreValue } from 'rc-field-form/es/interface';
 
 type TValidateTrigger = 'onChange' | 'onBlur';
@@ -72,6 +73,7 @@ export interface FormItemSchema<FormDataType = any> {
         operations: {
           setFieldsValue: (fieldsValue: { [field: string]: any }) => void;
           resetFields: (fields: NamePath[]) => void;
+          getFieldsValue: SchemaFormInstance['getFieldsValue']
         },
         currValue: any,
         formData: FormDataType,

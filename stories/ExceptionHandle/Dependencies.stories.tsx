@@ -10,7 +10,7 @@ import 'antd/dist/antd.css';
 // test
 
 const meta: Meta = {
-  title: '基础用法/简单例子',
+  title: '异常处理/循环依赖',
   component: SchemaForm,
   argTypes: {
     children: {
@@ -34,6 +34,7 @@ const Template = () => {
       {
         label: '操作系统',
         field: 'phoneos',
+        dependencies: ['versionDesc'],
         initialValue: 'other',
         component: {
           Element: FormItemWrapper(CustomRadioGroup),
@@ -48,6 +49,7 @@ const Template = () => {
       },
       {
         label: '版本描述',
+        dependencies: ['phoneos'],
         field: 'versionDesc',
         component: {
           Element: FormItemWrapper(CustomInput),
@@ -60,6 +62,9 @@ const Template = () => {
 
   return (
     <div>
+      <h2 style={{
+        textAlign: 'center'
+      }}>循环依赖报警</h2>
       <SchemaForm schema={schema} schemaForm={schemaForm}>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <Button

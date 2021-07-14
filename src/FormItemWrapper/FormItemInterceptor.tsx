@@ -40,7 +40,7 @@ const FormItemInterceptor = ({
     rules = [],
   } = formItemSchema;
   const { Element, props } = component;
-  const { setFieldsValue, resetFields } = schemaForm.rcForm;
+  const { setFieldsValue, resetFields, getFieldsValue } = schemaForm;
   const { dataStore } = formSchema;
   const formData = getFormData(schemaForm.rcForm, name); // 全局formData或者是nested formData
 
@@ -135,7 +135,11 @@ const FormItemInterceptor = ({
             const formData = getFormData(schemaForm.rcForm, name);
 
             fn(
-              { setFieldsValue, resetFields },
+              {
+                setFieldsValue,
+                resetFields,
+                getFieldsValue,
+              },
               getValue(nValue),
               formData,
               dataStore,

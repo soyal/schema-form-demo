@@ -1,23 +1,30 @@
 import { useRef } from 'react';
-import { useForm } from 'rc-field-form';
-import { FormInstance } from 'rc-field-form';
+import { useForm, FormInstance } from 'rc-field-form';
+import { NamePath } from 'rc-field-form/es/interface';
 import { TFieldStatus } from './typings/form';
+import { FormSchema } from './typings/schema';
 import { filterInvisibleFields, getFields } from './util';
 
 export class SchemaFormInstance {
   rcForm: FormInstance;
   fieldsStatus: TFieldStatus;
+  formSchema: FormSchema | null;
+  fieldUpdatorMap: { [key: string]: Set<string> }; // 各个field对其他field设置值的情况
 
   constructor(rcForm: FormInstance) {
     this.rcForm = rcForm;
     this.fieldsStatus = {};
+    this.formSchema = null;
+    this.fieldUpdatorMap = {};
   }
 
-  getFieldsValue() {
-    return this.rcForm.getFieldsValue();
-  }
+  getFieldsValue = (nameList?: NamePath[]) => {
+    return nameList === undefined
+      ? this.rcForm.getFieldsValue()
+      : this.rcForm.getFieldsValue(nameList);
+  };
 
-  getVisibleFieldsValue() {
+  getVisibleFieldsValue = () => {
     const originValues = this.rcForm.getFieldsValue();
     const filteredValues = filterInvisibleFields(
       originValues,
@@ -25,7 +32,25 @@ export class SchemaFormInstance {
     );
 
     return filteredValues;
+  };
+
+  validateFields = () => {
+    const visibleFields = this.getVisibleFields();
+
+    return this.rcForm.validateFields(visibleFields);
+  };
+
+  setFormSchema(formSchema: FormSchema) {
+    this.formSchema = formSchema;
   }
+
+  setFieldsValue = (values: { [key: string]: any }) => {
+    this.rcForm.setFieldsValue(values);
+  };
+
+  resetFields = (fields?: NamePath[]) => {
+    this.rcForm.resetFields(fields);
+  };
 
   /**
    * 提取visible的所有字段
@@ -40,12 +65,6 @@ export class SchemaFormInstance {
     });
 
     return visibledFields;
-  }
-
-  validateFields() {
-    const visibleFields = this.getVisibleFields();
-
-    return this.rcForm.validateFields(visibleFields);
   }
 }
 
