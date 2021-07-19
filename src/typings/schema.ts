@@ -36,7 +36,7 @@ export interface FormSchema<FormDataType = any> {
   style?: object;
 }
 
-type DataStore = any[];
+export type DataStore = any[];
 
 type StatusFunc = (
   value: any,

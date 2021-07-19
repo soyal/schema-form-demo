@@ -126,6 +126,7 @@ const FormItemInterceptor = ({
       required={required}
       validateMeta={validateMeta}
       formData={formData}
+      dataStore={dataStore}
       // onChange联动
       onChange={(nValue: any, runTimeParams?: any) => {
         onChange && onChange(nValue);
