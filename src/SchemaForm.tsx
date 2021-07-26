@@ -31,7 +31,7 @@ const SchemaForm = <FormDataType extends {} = any>({
 
   useEffect(() => {
     // 在所有field搜集完成后，强制做一次更新，否则visible、disabled这样的状态处理函数无法获取真实的表单数据(因为各个field在首次render的时候，拿到的formData是空的)
-    schemaForm.resetFields();
+    // schemaForm.resetFields();
 
     // 检测是否含有依赖循环
     const paths = hasDependencyCircle(schema.formItems);
