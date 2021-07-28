@@ -1,4 +1,5 @@
-const publicPath = '/musician-schema-form/'
+const publicPath =
+  process.env.NODE_ENV === 'development' ? '/' : '/musician-schema-form/';
 
 module.exports = {
   stories: ['../stories/**/*.stories.@(ts|tsx|js|jsx)'],
@@ -12,8 +13,6 @@ module.exports = {
     return config;
   },
   managerWebpack: async (config) => {
-
-
     configHtmlWebPackPlugin = config.plugins.find(
       (plugin) => plugin.constructor.name === 'HtmlWebpackPlugin'
     );
